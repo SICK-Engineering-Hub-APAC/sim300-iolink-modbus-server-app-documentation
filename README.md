@@ -63,21 +63,26 @@ Recommended release flow:
 git add .
 git commit -m "Add manual version v1.0.0"
 git push origin main
-./tools/release-docs.sh --tag v1.0.0
+./tools/release-docs.sh
 ```
 
 You can also deploy manually from the GitHub Actions tab using the
 `Deploy GitHub Pages` workflow.
 
-For a documentation-only update after a tag already exists, commit the change
-and publish a new patch tag:
+The release script reads the default tag from
+`manuals/sim300-iolink-modbus-server/manifest.json` field `latest`.
+
+For a documentation-only update after a tag already exists, update the manifest
+`latest` value to a new patch version, commit the change, and publish:
 
 ```powershell
 git add .
 git commit -m "Update usage manual"
 git push origin main
-./tools/release-docs.sh --tag v1.0.1
+./tools/release-docs.sh
 ```
+
+To override the manifest value manually, pass `--tag v1.0.1`.
 
 The release script builds the site, verifies there are no uncommitted changes,
 checks that the tag does not already exist locally or on `origin`, creates an

@@ -5,12 +5,14 @@ usage() {
   cat <<'EOF'
 Usage:
   tools/release-docs.sh --tag v1.0.0 [--message "Release documentation v1.0.0"] [--skip-build]
-  tools/release-docs.sh v1.0.0
+  tools/release-docs.sh
 
 Creates and pushes an annotated release tag for GitHub Pages deployment.
+If --tag is omitted, the script reads the latest manual version from:
+  manuals/sim300-iolink-modbus-server/manifest.json
 
 Options:
-  -t, --tag        Semantic version tag, for example v1.0.0.
+  -t, --tag        Semantic version tag override, for example v1.0.0.
   -m, --message    Annotated tag message.
       --skip-build Skip local static-site build before tagging.
   -h, --help       Show this help.
@@ -57,10 +59,33 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "$script_dir/.." && pwd)"
+cd "$repo_root"
+
+manifest_path="$repo_root/manuals/sim300-iolink-modbus-server/manifest.json"
+
+read_manifest_tag() {
+  if ! command -v node >/dev/null 2>&1; then
+    echo "Cannot read manifest latest version because node was not found." >&2
+    echo "Install Node.js, or pass --tag explicitly." >&2
+    exit 1
+  fi
+
+  node -e '
+const fs = require("fs");
+const manifestPath = process.argv[1];
+const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+if (!manifest.latest || typeof manifest.latest !== "string") {
+  console.error("manifest.json is missing string field: latest");
+  process.exit(1);
+}
+process.stdout.write(manifest.latest);
+' "$manifest_path"
+}
+
 if [[ -z "$tag" ]]; then
-  echo "Missing required tag." >&2
-  usage >&2
-  exit 2
+  tag="$(read_manifest_tag)"
 fi
 
 if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -71,10 +96,6 @@ fi
 if [[ -z "$message" ]]; then
   message="Release documentation $tag"
 fi
-
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-repo_root="$(cd "$script_dir/.." && pwd)"
-cd "$repo_root"
 
 run_build() {
   if command -v pwsh >/dev/null 2>&1; then
