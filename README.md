@@ -1,10 +1,19 @@
-# SICK SIM300 IO-Link Modbus Server Documentation
+# SICK SIM300 IO-Link Modbus TCP Server Documentation
 
 This repository stores public manuals and static documentation sites for the
-SICK SIM300 IO-Link Modbus Server AppSpace application.
+SICK SIM300 IO-Link Modbus TCP Server AppSpace application.
 
 The repository is organized so each manual can have its own versioned public
 website while still sharing one GitHub Pages deployment.
+
+Public entry points:
+
+```text
+/                         Documentation landing page
+/usage-manual/            Latest usage manual
+/api-manual/              Planned API manual page
+/manuals/<slug>/versions.html  Version selector for a manual
+```
 
 ## Repository Layout
 
@@ -16,7 +25,7 @@ website while still sharing one GitHub Pages deployment.
 |   `-- sim300-iolink-modbus-server/
 |       |-- manifest.json               Manual metadata and published versions
 |       `-- versions/
-|           `-- v0.1.0/
+|           `-- v1.0.0/
 |               |-- index.html          Versioned manual entry page
 |               `-- assets/             Images, downloads, static files for this version
 |-- tools/Build-Site.ps1                Builds the publishable static site into _site/
@@ -32,6 +41,10 @@ website while still sharing one GitHub Pages deployment.
 3. Update `manuals/<manual-slug>/manifest.json`:
    - Add the new version to `versions`.
    - Set `latest` to the new version when it should become the default.
+   - Set `publicPath` when the manual should have a clean URL such as
+     `usage-manual`.
+   - Add `compatibleAppVersions` and `compatibleFirmwareVersions` for the
+     version selector.
 4. Build locally:
 
 ```powershell
@@ -55,6 +68,27 @@ git push origin main --tags
 
 You can also deploy manually from the GitHub Actions tab using the
 `Deploy GitHub Pages` workflow.
+
+## Capture Application Screenshots
+
+The usage manual includes screenshots under each application section. To capture
+fresh screenshots from the running SIM300 web UI, run:
+
+```powershell
+.\tools\Capture-AppScreenshots.ps1 `
+  -AppUrl "http://192.168.100.136:8080/#/home?msdd=App.msdd" `
+  -Username "<username>" `
+  -Password "<password>"
+```
+
+Screenshots are written to:
+
+```text
+manuals/sim300-iolink-modbus-server/versions/v1.0.0/assets/screenshots/
+```
+
+If the application opens the SICK authentication page and no valid credentials
+are provided, the script saves `authentication-required.png` and stops.
 
 ## GitHub Pages Setup
 
