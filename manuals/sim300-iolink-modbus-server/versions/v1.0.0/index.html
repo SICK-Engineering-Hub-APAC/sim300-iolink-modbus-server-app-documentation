@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SIM300 IO-Link Modbus TCP Server Usage Manual v1.0.0</title>
+    <link rel="icon" type="image/jpeg" href="../../../assets/images/sick-logo.jpg">
+    <link rel="stylesheet" href="../../../assets/site/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="../../../index.html">
+          <img class="brand__logo" src="../../../assets/images/sick-logo.jpg" alt="SICK">
+          <span>SIM300 IO-Link Modbus TCP Server</span>
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="../../../index.html">Documentation Home</a>
+          <a href="../versions.html">Manual Versions</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main manual-page">
+      <section class="hero-media">
+        <div class="hero">
+          <p class="eyebrow">Usage Manual v1.0.0</p>
+          <h1>SIM300 IO-Link Modbus TCP Server Usage Manual</h1>
+          <p class="lead">
+            A practical guide for installing, opening, configuring, operating,
+            backing up, and troubleshooting the SICK SIM300 IO-Link Modbus
+            Server AppSpace application.
+          </p>
+        </div>
+        <img src="../../../assets/images/sick-sim300-device.png" alt="SICK SIM300 device">
+      </section>
+
+      <div class="manual-page__logo-row" aria-label="Related technologies">
+        <img src="../../../assets/images/io-link-logo.png" alt="IO-Link logo">
+        <img src="../../../assets/images/modbus-logo.png" alt="Modbus logo">
+      </div>
+
+      <div class="manual-note">
+        <strong>Version compatibility</strong>
+        This manual version is intended for application version <strong>1.1.0</strong>
+        on SIM300 firmware <strong>1.2.0</strong>. If your application version is
+        different, open the <a href="../versions.html">manual version list</a>
+        and select the matching manual.
+      </div>
+
+      <h2>Contents</h2>
+      <ul class="manual-toc">
+        <li><a href="#overview">What The Application Does</a></li>
+        <li><a href="#version-selection">Choose The Correct Manual</a></li>
+        <li><a href="#before-you-start">Before You Start</a></li>
+        <li><a href="#commissioning">Commissioning Workflow</a></li>
+        <li><a href="#installation">Install The Application</a></li>
+        <li><a href="#access">Open The Web UI</a></li>
+        <li><a href="#layout">Understand The Screen</a></li>
+        <li><a href="#main-page">Main Page</a></li>
+        <li><a href="#modbus-configuration">Modbus Configuration</a></li>
+        <li><a href="#iolink-endpoints">IO-Link Endpoints</a></li>
+        <li><a href="#normal-operation">Normal Operation</a></li>
+        <li><a href="#data-order">Data Order</a></li>
+        <li><a href="#application-settings">Application Settings</a></li>
+        <li><a href="#logs">Log Monitoring</a></li>
+        <li><a href="#help">Help</a></li>
+        <li><a href="#backup">Backup And Clone Settings</a></li>
+        <li><a href="#system-checks">System Checks</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li><a href="#glossary">Glossary</a></li>
+        <li><a href="#release-notes">Release Notes</a></li>
+      </ul>
+
+      <section id="overview" class="manual-section">
+        <h2>What The Application Does</h2>
+        <p>
+          The application runs on a SICK SIM300 device. It connects IO-Link data
+          with a Modbus TCP server so that a PLC, SCADA system, or other Modbus
+          TCP client can read from and write to selected IO-Link values.
+        </p>
+        <p>
+          The main idea is simple: create Modbus registers, create IO-Link
+          endpoints, and link them together. Source endpoints move data from an
+          IO-Link device into Modbus registers. Destination endpoints move
+          Modbus write values back to an IO-Link device.
+        </p>
+
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Where To Do It</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Check device, port, and server status</td><td>Main Page</td></tr>
+            <tr><td>Configure the Modbus TCP server</td><td>Modbus Configuration</td></tr>
+            <tr><td>Create Modbus register ranges</td><td>Modbus Configuration</td></tr>
+            <tr><td>Create IO-Link PD or ISDU mappings</td><td>IO-Link Endpoints</td></tr>
+            <tr><td>Set historian and log limits</td><td>Application Settings</td></tr>
+            <tr><td>Review runtime issues</td><td>Log Monitoring</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="version-selection" class="manual-section">
+        <h2>Choose The Correct Manual</h2>
+        <p>
+          Use the manual version that matches the application installed on the
+          SIM300. This matters because page names, fields, limits, and
+          validation behavior may change between application releases.
+        </p>
+        <ol class="procedure">
+          <li>Confirm the installed application version from the release package, AppManager, or project release record.</li>
+          <li>Open the documentation version selector from Manual Versions.</li>
+          <li>Select the manual version whose compatible app version includes the installed application version.</li>
+          <li>If no matching manual exists, use the closest older manual only as a reference and verify against the actual UI.</li>
+        </ol>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Manual Version</th>
+              <th>Compatible App Version</th>
+              <th>Compatible Firmware</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>v1.0.0</td>
+              <td>1.1.0</td>
+              <td>SIM300 firmware 1.2.0</td>
+              <td>Current</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="before-you-start" class="manual-section">
+        <h2>Before You Start</h2>
+        <p>
+          Confirm these items before commissioning or changing a configuration.
+        </p>
+        <ul>
+          <li>The PC can reach the SIM300 IP address through the correct Ethernet interface.</li>
+          <li>The SIM300 device is powered and visible in AppManager or SICK AppStudio/Sentio Creator tooling.</li>
+          <li>The application package is installed and running on the SIM300.</li>
+          <li>Required IO-Link sensors are physically connected to the intended SIM300 ports.</li>
+          <li>IODD files for connected sensors are available when process-data or ISDU definitions must be selected.</li>
+          <li>The target PLC or Modbus TCP client uses the same register plan and data order described in this manual.</li>
+        </ul>
+      </section>
+
+      <section id="commissioning" class="manual-section">
+        <h2>Commissioning Workflow</h2>
+        <p>
+          Follow this sequence for a new installation or when rebuilding a
+          configuration from zero. It keeps the work in an order that avoids
+          creating mappings before the required sensor and IODD information is
+          available.
+        </p>
+        <ol class="procedure">
+          <li>Install the application package on the SIM300.</li>
+          <li>Connect the PC, SIM300, IO-Link devices, and PLC or Modbus TCP client to the intended network.</li>
+          <li>Open the web UI and confirm that App Ready and Device are healthy.</li>
+          <li>Check each IO-Link port on the Main Page and upload missing IODD files.</li>
+          <li>Open Modbus Configuration and set the server port, Ethernet interface, connection limit, timeout, and enabled state.</li>
+          <li>Create the Modbus registers needed by the PLC address plan.</li>
+          <li>Open IO-Link Endpoints and create source endpoints for IO-Link values that the PLC must read.</li>
+          <li>Create destination endpoints for values that the PLC must write back to IO-Link devices.</li>
+          <li>Link each endpoint to a Modbus register with the correct quantity.</li>
+          <li>Select Reload Apps after successful configuration changes when the UI asks for it.</li>
+          <li>Use the PLC or a Modbus test client to read source registers and write destination registers.</li>
+          <li>Check Recent Modbus Write Requests and Log Monitoring for confirmation or errors.</li>
+          <li>Back up <code>/public/CSK_PersistentData.bin</code> after commissioning is accepted.</li>
+        </ol>
+      </section>
+
+      <section id="installation" class="manual-section">
+        <h2>Install The Application</h2>
+        <p>
+          Install the AppSpace application package on the SIM300 before opening
+          the web UI.
+        </p>
+        <h3>Download The Application Package</h3>
+        <p>
+          Download the official application package from SICK AppPool:
+        </p>
+        <p>
+          <a href="https://apppool.cloud.sick.com/publications/eb7bca13-49a7-458a-b38c-6acf2ad71b1e" target="_blank" rel="noreferrer">
+            Open SIM300 IO-Link Modbus TCP Server application package in SICK AppPool
+          </a>
+        </p>
+        <ol class="procedure">
+          <li>Open the AppPool link in a browser.</li>
+          <li>Sign in with a SICK account if AppPool asks for authentication.</li>
+          <li>Download the application package for the compatible app version listed by this manual.</li>
+          <li>Save the package to a known local folder on the service PC.</li>
+          <li>Keep the downloaded file name and version information with the commissioning record.</li>
+        </ol>
+        <div class="manual-note">
+          <strong>Before installation</strong>
+          Confirm that the downloaded package version matches the compatible app
+          version shown in this manual. For this manual version, the compatible
+          app version is <strong>1.1.0</strong>.
+        </div>
+        <h3>Install On SIM300</h3>
+        <ol class="procedure">
+          <li>Open AppManager or Sentio Creator.</li>
+          <li>Scan for the target SIM300 device.</li>
+          <li>Select the SIM300 device.</li>
+          <li>Select the downloaded application package.</li>
+          <li>Install the application package on the SIM300.</li>
+          <li>Wait until installation finishes and the application is running.</li>
+        </ol>
+        <div class="manual-note">
+          <strong>After installation</strong>
+          Open the Main Page first. The top status indicators should show that
+          the app is ready, the Modbus server state is known, and the device is
+          reachable.
+        </div>
+      </section>
+
+      <section id="access" class="manual-section">
+        <h2>Open The Web UI</h2>
+        <p>
+          Open a browser such as Google Chrome or Microsoft Edge and enter:
+        </p>
+        <pre><code>http://&lt;device-ip-address&gt;:8080/#/home?msdd=App.msdd</code></pre>
+        <p>
+          Example used while preparing this manual:
+        </p>
+        <pre><code>http://192.168.100.136:8080/#/home?msdd=App.msdd</code></pre>
+        <p>
+          If the SICK login page appears, sign in with a permitted user account.
+          After login, the web UI opens the Main Page.
+        </p>
+      </section>
+
+      <section id="layout" class="manual-section">
+        <h2>Understand The Screen</h2>
+        <p>
+          The web UI uses a fixed header and page area. The menu icon opens the
+          side navigation. The status chips in the header give a quick runtime
+          check before you start changing settings.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Header Item</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>App Ready</td><td>The application backend is ready to process requests.</td></tr>
+            <tr><td>Modbus Server</td><td>The embedded Modbus TCP server is running or stopped.</td></tr>
+            <tr><td>Device</td><td>The SIM300 device connection is available.</td></tr>
+            <tr><td>Reload Apps</td><td>Reloads AppSpace apps after configuration changes that require a reload.</td></tr>
+            <tr><td>Language icon</td><td>Switches the display language.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="main-page" class="manual-section">
+        <h2>Main Page</h2>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/home.png" alt="Main Page showing port status, operation statistics, and write request history">
+          <figcaption>Main Page with port status, operation statistics, and recent Modbus write requests.</figcaption>
+        </figure>
+
+        <h3>Device Port Connection Status</h3>
+        <p>
+          Use this panel first during commissioning. It shows whether each
+          SIM300 IO-Link port is enabled, connected, and supported by an IODD
+          file.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>How To Use It</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Enabled checkbox</td><td>Turns the selected port on or off after confirmation.</td></tr>
+            <tr><td>Connected / Disconnected</td><td>Shows whether a sensor is detected on the port.</td></tr>
+            <tr><td>Sensor</td><td>Shows the detected sensor name, or N/A if no device is available.</td></tr>
+            <tr><td>IODD status</td><td>Shows whether usable IODD metadata is available for the connected sensor.</td></tr>
+            <tr><td>Upload</td><td>Opens the IODD Interpreter page when a connected sensor needs an IODD file.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Operation Statistics</h3>
+        <p>
+          This area summarizes the configured Modbus registers and IO-Link
+          endpoints. Use it as a quick check after creating or deleting
+          mappings.
+        </p>
+
+        <h3>Recent Modbus Write Requests</h3>
+        <p>
+          This table shows write requests received by the Modbus server. It is
+          useful when checking whether a PLC is writing to the expected register
+          and whether the value is reaching the application.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Filter Or Column</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Register Name filter</td><td>Shows only rows matching a register name keyword.</td></tr>
+            <tr><td>Port filter</td><td>Shows rows related to the selected IO-Link port.</td></tr>
+            <tr><td>Updated Time From / To</td><td>Limits the history to a selected time range.</td></tr>
+            <tr><td>Updated Hex Value</td><td>Shows the received write payload in hexadecimal form.</td></tr>
+            <tr><td>Updated Time</td><td>Shows when the write request was recorded.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="modbus-configuration" class="manual-section">
+        <h2>Modbus Configuration</h2>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/modbus-configuration.png" alt="Modbus Configuration page">
+          <figcaption>Modbus Configuration page with server settings and register list.</figcaption>
+        </figure>
+
+        <h3>Modbus Server Settings</h3>
+        <p>
+          These settings define how external Modbus TCP clients connect to the
+          SIM300.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Recommended Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Modbus Server Port</td><td>TCP port used by the server. Default from the legacy manual is 502. Valid UI range is 1 to 65535.</td></tr>
+            <tr><td>Ethernet Interface</td><td>Selects the SIM300 Ethernet interface, for example P1 or P2.</td></tr>
+            <tr><td>Max Connections</td><td>Maximum simultaneous Modbus client connections. Default from the legacy manual is 10. Valid UI range is 1 to 1000.</td></tr>
+            <tr><td>Transmit Timeout (ms)</td><td>Modbus communication timeout. Default from the legacy manual is 3000 ms. Valid UI range is 100 to 60000 ms.</td></tr>
+            <tr><td>Enabled</td><td>Enables or disables the Modbus TCP server.</td></tr>
+            <tr><td>Save</td><td>Saves the server settings. Reload apps when the success notification asks for it.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Register List</h3>
+        <p>
+          A Modbus register entry defines a visible Modbus memory area. Register
+          ranges must not overlap within the same register type.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>What It Does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Refresh</td><td>Reloads the register list from the device.</td></tr>
+            <tr><td>Create Register</td><td>Opens the register creation form.</td></tr>
+            <tr><td>Reset Registers</td><td>Deletes all registers or all registers of a selected type.</td></tr>
+            <tr><td>View</td><td>Opens details and lets you read the current register value.</td></tr>
+            <tr><td>Edit</td><td>Changes an existing register definition.</td></tr>
+            <tr><td>Delete</td><td>Deletes one register after confirmation.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="figure-grid">
+          <figure class="manual-figure">
+            <img src="assets/screenshots/modal-create-modbus-register.png" alt="Create Modbus Register dialog">
+            <figcaption>Create Modbus Register dialog.</figcaption>
+          </figure>
+          <figure class="manual-figure">
+            <img src="assets/screenshots/modal-reset-modbus-registers.png" alt="Reset Registers dialog">
+            <figcaption>Reset Registers dialog.</figcaption>
+          </figure>
+        </div>
+
+        <h3>Create A Modbus Register</h3>
+        <ol class="procedure">
+          <li>Open Modbus Configuration.</li>
+          <li>Select Create Register.</li>
+          <li>Enter a clear register name.</li>
+          <li>Select the register type and data type.</li>
+          <li>Enter the starting address and quantity.</li>
+          <li>Confirm that the range does not overlap an existing register of the same type.</li>
+          <li>Select Create.</li>
+          <li>Reload apps if the success notification asks for it.</li>
+        </ol>
+
+        <h3>View Or Read A Register</h3>
+        <ol class="procedure">
+          <li>Open Modbus Configuration.</li>
+          <li>Use Register Name or Register Type filters to find the target register.</li>
+          <li>Select View.</li>
+          <li>Review register type, data type, start address, quantity, and linked endpoint.</li>
+          <li>Select the read format: Decoded by Data Type or Hex Value.</li>
+          <li>Select Read Value to read the current register value.</li>
+        </ol>
+
+        <h3>Edit, Delete, Or Reset Registers</h3>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Procedure</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Edit one register</td>
+              <td>Find the register, select Edit, change the required fields, submit the form, and reload apps if requested.</td>
+            </tr>
+            <tr>
+              <td>Delete one register</td>
+              <td>Find the register, select Delete, review the confirmation prompt, and select Send to confirm.</td>
+            </tr>
+            <tr>
+              <td>Reset registers by type</td>
+              <td>Select Reset Registers, choose a register type, submit the form, and reload apps if requested.</td>
+            </tr>
+            <tr>
+              <td>Reset all registers</td>
+              <td>Select Reset Registers, keep All selected, submit the form, and reload apps if requested.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Function Code Support</h3>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Register Type</th>
+              <th>Supported Modbus Function Codes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Coil</td><td>Read: FC 01 Read Coils. Write: FC 15 Force Multiple Coils.</td></tr>
+            <tr><td>Discrete Input</td><td>Read: FC 02 Read Discrete Inputs. Write: not supported.</td></tr>
+            <tr><td>Holding Register</td><td>Read: FC 03 Read Holding Registers. Write: FC 06 Preset Single Register or FC 16 Preset Multiple Registers.</td></tr>
+            <tr><td>Input Register</td><td>Read: FC 04 Read Input Registers. Write: not supported.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="iolink-endpoints" class="manual-section">
+        <h2>IO-Link Endpoints</h2>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/iolink-endpoint-configuration.png" alt="IO-Link Endpoint Configuration page">
+          <figcaption>IO-Link Endpoint Configuration page.</figcaption>
+        </figure>
+
+        <p>
+          An endpoint tells the application which IO-Link value to read or
+          write. An endpoint may use Process Data or ISDU access. It can be
+          linked to a Modbus register so that external Modbus clients can access
+          that IO-Link value.
+        </p>
+
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Endpoint Name</td><td>Operator-friendly name for the mapping.</td></tr>
+            <tr><td>Port</td><td>SIM300 IO-Link port, normally S1 to S8.</td></tr>
+            <tr><td>Target</td><td>Direction of the data flow, Sensor to Device or Device to Sensor.</td></tr>
+            <tr><td>Access Type</td><td>Process Data or Indexed Service Data Unit.</td></tr>
+            <tr><td>Enabled</td><td>Controls whether the endpoint participates in runtime operation.</td></tr>
+            <tr><td>Refresh Duration</td><td>Polling interval in milliseconds for source-type endpoints.</td></tr>
+            <tr><td>Endpoint Info</td><td>Process-data offset/block or ISDU index/subindex information.</td></tr>
+            <tr><td>Linked Register Memory Info</td><td>The Modbus register linked to this endpoint.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="figure-grid">
+          <figure class="manual-figure">
+            <img src="assets/screenshots/modal-create-iolink-endpoint.png" alt="Create IO-Link Endpoint dialog">
+            <figcaption>Create IO-Link Endpoint dialog.</figcaption>
+          </figure>
+          <figure class="manual-figure">
+            <img src="assets/screenshots/modal-reset-iolink-endpoints.png" alt="Reset Endpoints dialog">
+            <figcaption>Reset Endpoints dialog.</figcaption>
+          </figure>
+        </div>
+
+        <h3>Prepare IODD Files</h3>
+        <p>
+          Upload the correct IODD file before creating endpoints for a connected
+          sensor. Without IODD metadata, the application may not be able to show
+          valid Process Data or ISDU definitions.
+        </p>
+        <p>
+          You can open the IODD Interpreter directly with this URL:
+        </p>
+        <pre><code>http://&lt;device-ip-address&gt;:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code></pre>
+        <p>
+          Example:
+        </p>
+        <pre><code>http://192.168.100.136:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code></pre>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/iodd-interpreter.png" alt="IODD Interpreter page with Upload IODD XML control">
+          <figcaption>IODD Interpreter page used to upload and manage IODD XML files.</figcaption>
+        </figure>
+        <ol class="procedure">
+          <li>Open the IODD Interpreter page from the direct URL, the Upload link on the Main Page, or the platform menu.</li>
+          <li>Sign in if the SICK login page appears.</li>
+          <li>Select Upload IODD or Upload IODD XML.</li>
+          <li>Select the correct IODD <code>.xml</code> file for the sensor connected to the SIM300 port.</li>
+          <li>Wait until the upload finishes and the IODD is listed or accepted by the page.</li>
+          <li>Return to the SIM300 IO-Link Modbus TCP Server application.</li>
+          <li>Open the Main Page and confirm that the related port changes to IODD Available/Updated.</li>
+          <li>Open IO-Link Endpoints and refresh definitions if the endpoint form was already open.</li>
+        </ol>
+        <div class="manual-note">
+          <strong>Use the matching IODD</strong>
+          The IODD file should match the connected sensor vendor, device, and
+          version information. If the wrong IODD is uploaded, endpoint
+          definitions may be missing or validation may fail.
+        </div>
+
+        <h3>Create An Endpoint</h3>
+        <ol class="procedure">
+          <li>Open IO-Link Endpoints.</li>
+          <li>Select Create Endpoint.</li>
+          <li>Enter an endpoint name.</li>
+          <li>Select Port, Target, and Access Type.</li>
+          <li>Select a Process Data or ISDU definition from the definition browser.</li>
+          <li>For source endpoints, set the refresh duration. The legacy manual notes a minimum polling cycle of 50 ms.</li>
+          <li>Select an existing linked Modbus register, or use Generate to create a compatible register.</li>
+          <li>Check the quantity validation message.</li>
+          <li>Select Create.</li>
+          <li>Reload apps if the success notification asks for it.</li>
+        </ol>
+
+        <h3>View, Edit, Delete, Reset, Or Enable Endpoints</h3>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Procedure</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>View endpoint details</td>
+              <td>Find the endpoint in the list, select View, and review port, target, access type, endpoint info, refresh duration, enabled state, and linked register information.</td>
+            </tr>
+            <tr>
+              <td>Edit endpoint</td>
+              <td>Select Edit, update the required fields, confirm linked register validation, submit the form, and reload apps if requested.</td>
+            </tr>
+            <tr>
+              <td>Enable or disable endpoint</td>
+              <td>Use the checkbox in the Enabled column, review the confirmation prompt, and select Send to confirm.</td>
+            </tr>
+            <tr>
+              <td>Delete endpoint</td>
+              <td>Select Delete, review the confirmation prompt, and select Send to confirm.</td>
+            </tr>
+            <tr>
+              <td>Reset endpoints by port</td>
+              <td>Select Reset Endpoints, choose the target port, submit the form, and reload apps if requested.</td>
+            </tr>
+            <tr>
+              <td>Reset all endpoints</td>
+              <td>Select Reset Endpoints, keep All selected, submit the form, and reload apps if requested.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="manual-warning">
+          <strong>Mapping rule</strong>
+          One linked Modbus register can only be assigned to one IO-Link
+          endpoint. The linked register quantity must exactly match the quantity
+          required by the selected endpoint definition.
+        </div>
+      </section>
+
+      <section id="normal-operation" class="manual-section">
+        <h2>Normal Operation</h2>
+        <p>
+          During normal production use, operators usually do not need to change
+          register or endpoint definitions. The most common tasks are checking
+          status, confirming data exchange, and reacting to alarms or missing
+          communication.
+        </p>
+
+        <h3>Start-Of-Shift Check</h3>
+        <ol class="procedure">
+          <li>Open the Main Page.</li>
+          <li>Confirm App Ready is green.</li>
+          <li>Confirm Modbus Server is green when the PLC should communicate with the application.</li>
+          <li>Confirm Device is green.</li>
+          <li>Check that required IO-Link ports are connected and enabled.</li>
+          <li>Check that required ports show IODD Available/Updated.</li>
+          <li>Review Recent Modbus Write Requests if destination writes are expected from the PLC.</li>
+        </ol>
+
+        <h3>After Configuration Changes</h3>
+        <p>
+          Many changes are saved first and only become active in runtime after
+          the application reloads. When the UI shows a success message asking
+          for reload, select Reload Apps before testing with the PLC.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Change</th>
+              <th>Recommended Follow-Up</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Modbus server settings</td><td>Reload apps, then reconnect the Modbus client.</td></tr>
+            <tr><td>New, edited, deleted, or reset Modbus registers</td><td>Reload apps, then verify reads and writes from the Modbus client.</td></tr>
+            <tr><td>New, edited, deleted, reset, enabled, or disabled endpoints</td><td>Reload apps, then verify linked register values and IO-Link behavior.</td></tr>
+            <tr><td>Application settings</td><td>Reload apps if requested by the success notification.</td></tr>
+            <tr><td>Uploaded backup settings file</td><td>Reload apps before checking the restored configuration.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Change-Control Recommendation</h3>
+        <p>
+          For service work, record the Modbus register plan, endpoint list,
+          connected sensor types, and IODD file versions before and after
+          changes. This helps another engineer understand why each PLC address
+          is mapped to a specific IO-Link value.
+        </p>
+      </section>
+
+      <section id="data-order" class="manual-section">
+        <h2>Data Order</h2>
+        <p>
+          Use this section when configuring a PLC, SCADA system, or test client
+          to read and write multi-byte values correctly.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Data Area</th>
+              <th>Order Used By The Application</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Holding and Input registers</td>
+              <td>Big-endian byte order inside each 16-bit register. Multi-register values use high word first.</td>
+            </tr>
+            <tr>
+              <td>32-bit example</td>
+              <td><code>0x11223344</code> maps as register N = <code>0x1122</code>, register N+1 = <code>0x3344</code>.</td>
+            </tr>
+            <tr>
+              <td>Float32</td>
+              <td>Big-endian packing and unpacking.</td>
+            </tr>
+            <tr>
+              <td>IO-Link process data</td>
+              <td>Raw process-data byte order is kept as received from IO-Link. Mapping uses byte offset and block, with no byte swap or word swap.</td>
+            </tr>
+            <tr>
+              <td>Values fitted to register size</td>
+              <td>Shorter values are left-padded. Longer values keep least-significant bytes for big-endian numeric behavior.</td>
+            </tr>
+            <tr>
+              <td>Coils and Discrete Inputs</td>
+              <td>Coil bytes follow Modbus bit order, LSB-first within each byte. The UI/logical binary representation remains MSB-style.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="application-settings" class="manual-section">
+        <h2>Application Settings</h2>
+        <div class="figure-grid">
+          <figure class="manual-figure">
+            <img src="assets/screenshots/application-settings-general.png" alt="Application Settings General tab">
+            <figcaption>General Settings tab.</figcaption>
+          </figure>
+          <figure class="manual-figure">
+            <img src="assets/screenshots/application-settings-network.png" alt="Application Settings Network tab">
+            <figcaption>Network Settings tab.</figcaption>
+          </figure>
+        </div>
+
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Setting</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Modbus Write Historian - Record Limit</td><td>Maximum number of stored write request records. UI range is 0 to 10000. Legacy default is 500 records.</td></tr>
+            <tr><td>Application Logging - Data Maximum Storage</td><td>Maximum storage for application logs. Current UI range is 0 to 10 MB. Legacy manual default is 1 MB.</td></tr>
+            <tr><td>Network Settings</td><td>Embedded Device Control Center page for network interface settings.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="logs" class="manual-section">
+        <h2>Log Monitoring</h2>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/log-monitoring.png" alt="Log Monitoring page">
+          <figcaption>Application Logger embedded in the Log Monitoring page.</figcaption>
+        </figure>
+        <p>
+          Use this page when the Main Page shows that the application is not
+          ready, the Modbus server is stopped unexpectedly, endpoint creation
+          fails, or write requests do not behave as expected.
+        </p>
+      </section>
+
+      <section id="help" class="manual-section">
+        <h2>Help</h2>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/help.png" alt="Help page with reference links">
+          <figcaption>Help page with reference links.</figcaption>
+        </figure>
+        <p>
+          The Help page provides reference links for the user manual, device
+          management API documentation, SICK device information, the SICK
+          support portal, and the IODD Finder.
+        </p>
+      </section>
+
+      <section id="backup" class="manual-section">
+        <h2>Backup And Clone Settings</h2>
+        <p>
+          Use the SIM300 File Manager when you need to back up the current
+          configuration or copy the same settings to another SIM300 device.
+        </p>
+        <p>
+          The persistent configuration file is:
+        </p>
+        <pre><code>/public/CSK_PersistentData.bin</code></pre>
+
+        <h3>Download A Backup</h3>
+        <ol class="procedure">
+          <li>Open File Manager from the SIM300 platform menu.</li>
+          <li>Go to the <code>/public</code> folder.</li>
+          <li>Select <code>CSK_PersistentData.bin</code>.</li>
+          <li>Select Download and save the file to the local PC.</li>
+        </ol>
+
+        <h3>Clone Settings To Another Device</h3>
+        <ol class="procedure">
+          <li>Confirm the target SIM300 uses the same application version and a compatible firmware environment.</li>
+          <li>Open File Manager on the target SIM300.</li>
+          <li>Go to the <code>/public</code> folder.</li>
+          <li>If <code>CSK_PersistentData.bin</code> already exists, delete it first.</li>
+          <li>Upload the backup <code>CSK_PersistentData.bin</code> file.</li>
+          <li>Reload apps so the uploaded configuration is applied.</li>
+        </ol>
+      </section>
+
+      <section id="system-checks" class="manual-section">
+        <h2>System Checks</h2>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Value Or Check</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Compatible application version for this manual</td><td>1.1.0</td></tr>
+            <tr><td>SIM300 firmware referenced by legacy manual</td><td>1.2.0</td></tr>
+            <tr><td>Minimum IO-Link data polling cycle noted by legacy manual</td><td>50 ms</td></tr>
+            <tr><td>Maximum write historian entries</td><td>10000 records</td></tr>
+            <tr><td>Application log storage range in current UI</td><td>0 to 10 MB</td></tr>
+          </tbody>
+        </table>
+        <p>
+          After adding many registers or endpoints, open the SIM300 Dashboard
+          and review CPU usage, memory, storage, and temperature. This check is
+          useful before placing a large configuration into long-term operation.
+        </p>
+      </section>
+
+      <section id="troubleshooting" class="manual-section">
+        <h2>Troubleshooting</h2>
+        <p>
+          Start troubleshooting from the Main Page. It shows the fastest status
+          indicators for the app, Modbus server, SIM300 device connection, and
+          IO-Link ports. Then use Log Monitoring for details.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Symptom</th>
+              <th>Possible Cause</th>
+              <th>Recommended Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Web page cannot be opened</td>
+              <td>Wrong IP address, wrong network interface, cable issue, or device not reachable.</td>
+              <td>Check PC network settings, SIM300 IP address, Ethernet cable, and browser URL.</td>
+            </tr>
+            <tr>
+              <td>Login page opens but app page does not load</td>
+              <td>User is not signed in or does not have access.</td>
+              <td>Sign in with a permitted account, then reopen the application URL.</td>
+            </tr>
+            <tr>
+              <td>App Ready is not healthy</td>
+              <td>Application startup or backend initialization problem.</td>
+              <td>Open Log Monitoring, check recent errors, then reload apps or restart the application if required by local service procedure.</td>
+            </tr>
+            <tr>
+              <td>Modbus Server is stopped</td>
+              <td>Server disabled, invalid server settings, selected Ethernet interface unavailable, or startup failure.</td>
+              <td>Open Modbus Configuration, confirm Enabled, port, interface, max connections, and timeout. Save and reload apps.</td>
+            </tr>
+            <tr>
+              <td>PLC cannot connect</td>
+              <td>Network route, firewall, wrong Modbus port, server disabled, or maximum connection limit reached.</td>
+              <td>Ping the SIM300, verify the Modbus server port, check Max Connections, and confirm the PLC uses the correct SIM300 IP/interface.</td>
+            </tr>
+            <tr>
+              <td>Port shows Disconnected</td>
+              <td>Sensor not connected, cable issue, wrong port, or IO-Link communication problem.</td>
+              <td>Check the physical connection, sensor power, and correct SIM300 port assignment.</td>
+            </tr>
+            <tr>
+              <td>IODD Not Available</td>
+              <td>IODD file missing or not matching the connected sensor.</td>
+              <td>Use Upload or open <code>http://&lt;device-ip-address&gt;:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code>, upload the correct IODD XML file, then refresh or reload as needed.</td>
+            </tr>
+            <tr>
+              <td>Endpoint definition list is empty</td>
+              <td>No valid IODD metadata for the selected port, target, or access type.</td>
+              <td>Confirm the sensor is connected, IODD is available, and the selected Target and Access Type are valid for that device.</td>
+            </tr>
+            <tr>
+              <td>Cannot save endpoint with linked register</td>
+              <td>Linked register quantity does not match endpoint-required quantity, or the register is already linked to another endpoint.</td>
+              <td>Select Generate where available, or create a register with the exact required quantity and no existing endpoint link.</td>
+            </tr>
+            <tr>
+              <td>Modbus values appear byte-swapped or word-swapped in PLC</td>
+              <td>PLC interpretation does not match the application data order.</td>
+              <td>Configure the PLC for big-endian bytes and high-word-first multi-register values. See Data Order.</td>
+            </tr>
+            <tr>
+              <td>Recent write requests stay empty</td>
+              <td>No PLC writes received, wrong register address, unsupported register type, or historian filter hides rows.</td>
+              <td>Clear filters, check PLC write address/type, and confirm the destination endpoint is linked and enabled.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="glossary" class="manual-section">
+        <h2>Glossary</h2>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Term</th>
+              <th>Meaning In This Manual</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>SIM300</td><td>SICK device that runs the AppSpace application.</td></tr>
+            <tr><td>AppSpace application</td><td>The installed application package that provides Modbus TCP and IO-Link bridge functions.</td></tr>
+            <tr><td>Modbus TCP server</td><td>The server running on SIM300 that external Modbus TCP clients connect to.</td></tr>
+            <tr><td>Modbus register</td><td>A configured Modbus memory range exposed by the application.</td></tr>
+            <tr><td>IO-Link endpoint</td><td>A configured IO-Link value access point, using Process Data or ISDU.</td></tr>
+            <tr><td>Source endpoint</td><td>Endpoint that moves IO-Link data into a Modbus register.</td></tr>
+            <tr><td>Destination endpoint</td><td>Endpoint that receives Modbus writes and forwards them to IO-Link.</td></tr>
+            <tr><td>PD</td><td>Process Data, cyclic IO-Link data.</td></tr>
+            <tr><td>ISDU</td><td>Indexed Service Data Unit, acyclic IO-Link parameter data addressed by index and subindex.</td></tr>
+            <tr><td>IODD</td><td>IO Device Description file that describes an IO-Link device and its available data definitions.</td></tr>
+            <tr><td>Reload Apps</td><td>Action that reloads AppSpace apps so saved configuration changes become active at runtime.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="release-notes" class="manual-section">
+        <h2>Release Notes</h2>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Application Version</th>
+              <th>Release Date</th>
+              <th>Highlights</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1.0.0</td>
+              <td>2025-10-01</td>
+              <td>Initial release with Modbus TCP server settings, register management, IO-Link endpoint management, IODD-based validation, source polling, destination write flow, runtime status indicators, logs, and Angular web UI.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          This manual was prepared from the current application web UI, the
+          application source, the project changelog, and the earlier
+          installation and operating manual. When the application changes, create
+          a new manual version instead of overwriting this one.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>&copy; <span data-current-year></span> SICK Engineering Hub APAC</span>
+    </footer>
+    <script src="../../../assets/site/site.js"></script>
+  </body>
+</html>

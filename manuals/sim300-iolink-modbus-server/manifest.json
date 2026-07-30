@@ -1,14 +1,22 @@
 {
   "slug": "sim300-iolink-modbus-server",
-  "title": "SIM300 IO-Link Modbus Server AppSpace Application",
-  "description": "Installation, configuration, operation, and release documentation for the SIM300 IO-Link Modbus Server application.",
-  "latest": "v0.1.0",
+  "title": "SIM300 IO-Link Modbus TCP Server Usage Manual",
+  "description": "Installation, operation, configuration, backup, and troubleshooting guide for the SIM300 IO-Link Modbus TCP Server AppSpace application.",
+  "publicPath": "usage-manual",
+  "manualType": "usage",
+  "latest": "v1.0.0",
   "versions": [
     {
-      "version": "v0.1.0",
-      "status": "draft",
+      "version": "v1.0.0",
+      "status": "current",
       "date": "2026-07-30",
-      "summary": "Initial documentation scaffold."
+      "summary": "Usage manual aligned with application version 1.1.0.",
+      "compatibleAppVersions": [
+        "1.1.0"
+      ],
+      "compatibleFirmwareVersions": [
+        "SIM300 firmware 1.2.0"
+      ]
     }
   ]
 }
