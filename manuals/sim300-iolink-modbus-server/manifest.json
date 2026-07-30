@@ -1,0 +1,14 @@
+{
+  "slug": "sim300-iolink-modbus-server",
+  "title": "SIM300 IO-Link Modbus Server AppSpace Application",
+  "description": "Installation, configuration, operation, and release documentation for the SIM300 IO-Link Modbus Server application.",
+  "latest": "v0.1.0",
+  "versions": [
+    {
+      "version": "v0.1.0",
+      "status": "draft",
+      "date": "2026-07-30",
+      "summary": "Initial documentation scaffold."
+    }
+  ]
+}
