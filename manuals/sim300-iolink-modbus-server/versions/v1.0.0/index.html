@@ -27,9 +27,9 @@
           <p class="eyebrow">Usage Manual v1.0.0</p>
           <h1>SIM300 IO-Link Modbus TCP Server Usage Manual</h1>
           <p class="lead">
-            A practical guide for installing, opening, configuring, operating,
-            backing up, and troubleshooting the SICK SIM300 IO-Link Modbus
-            Server AppSpace application.
+            A practical guide for service engineers, integrators, and operators
+            who need to install, configure, operate, back up, and troubleshoot
+            the SICK SIM300 IO-Link Modbus TCP Server application.
           </p>
         </div>
         <img src="../../../assets/images/sick-sim300-device.png" alt="SICK SIM300 device">
@@ -48,32 +48,130 @@
         and select the matching manual.
       </div>
 
+      <section id="how-to-use" class="manual-section">
+        <h2>Start Here</h2>
+        <p>
+          Use this page as a step-by-step guide. Start with the videos for a
+          quick visual overview, then follow the written sections when you need
+          exact settings, field meanings, checks, or troubleshooting steps.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Reader Need</th>
+              <th>Recommended Sections</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>First-time setup</td><td>Training Videos, Before You Start, Commissioning Workflow, Download And Install, Open The Web UI.</td></tr>
+            <tr><td>Daily operation</td><td>Main Page, Normal Operation, Log Monitoring, Troubleshooting.</td></tr>
+            <tr><td>PLC or Modbus integration</td><td>Modbus Configuration, IO-Link Endpoints, Data Order.</td></tr>
+            <tr><td>Service replacement or cloning</td><td>Backup And Clone Settings, System Checks, Troubleshooting.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
       <h2>Contents</h2>
       <ul class="manual-toc">
-        <li><a href="#overview">What The Application Does</a></li>
-        <li><a href="#version-selection">Choose The Correct Manual</a></li>
-        <li><a href="#before-you-start">Before You Start</a></li>
-        <li><a href="#commissioning">Commissioning Workflow</a></li>
-        <li><a href="#installation">Install The Application</a></li>
-        <li><a href="#access">Open The Web UI</a></li>
-        <li><a href="#layout">Understand The Screen</a></li>
-        <li><a href="#main-page">Main Page</a></li>
-        <li><a href="#modbus-configuration">Modbus Configuration</a></li>
-        <li><a href="#iolink-endpoints">IO-Link Endpoints</a></li>
-        <li><a href="#normal-operation">Normal Operation</a></li>
-        <li><a href="#data-order">Data Order</a></li>
-        <li><a href="#application-settings">Application Settings</a></li>
-        <li><a href="#logs">Log Monitoring</a></li>
-        <li><a href="#help">Help</a></li>
-        <li><a href="#backup">Backup And Clone Settings</a></li>
-        <li><a href="#system-checks">System Checks</a></li>
-        <li><a href="#troubleshooting">Troubleshooting</a></li>
-        <li><a href="#glossary">Glossary</a></li>
-        <li><a href="#release-notes">Release Notes</a></li>
+        <li><a href="#instruction-videos">Part 1 - Training Videos</a></li>
+        <li><a href="#overview">Part 2 - Understand The Application</a></li>
+        <li><a href="#version-selection">Part 3 - Choose The Correct Manual</a></li>
+        <li><a href="#before-you-start">Part 4 - Prepare The Work</a></li>
+        <li><a href="#commissioning">Part 5 - Commission The System</a></li>
+        <li><a href="#installation">Part 6 - Download And Install</a></li>
+        <li><a href="#access">Part 7 - Open The Web UI</a></li>
+        <li><a href="#layout">Part 8 - Understand The Screen</a></li>
+        <li><a href="#main-page">Part 9 - Check Runtime Status</a></li>
+        <li><a href="#modbus-configuration">Part 10 - Configure Modbus</a></li>
+        <li><a href="#iolink-endpoints">Part 11 - Configure IO-Link Mappings</a></li>
+        <li><a href="#normal-operation">Part 12 - Operate The System</a></li>
+        <li><a href="#data-order">Part 13 - Check Data Order</a></li>
+        <li><a href="#application-settings">Part 14 - Adjust Settings</a></li>
+        <li><a href="#logs">Part 15 - Review Logs</a></li>
+        <li><a href="#help">Part 16 - Open Help Links</a></li>
+        <li><a href="#backup">Part 17 - Back Up And Clone</a></li>
+        <li><a href="#system-checks">Part 18 - Final System Checks</a></li>
+        <li><a href="#troubleshooting">Part 19 - Troubleshooting</a></li>
+        <li><a href="#glossary">Reference - Glossary</a></li>
+        <li><a href="#release-notes">Reference - Release Notes</a></li>
       </ul>
 
+      <section id="instruction-videos" class="manual-section">
+        <h2>Part 1 - Training Videos</h2>
+        <p>
+          These videos demonstrate the main operating procedures for the
+          application. Use them together with the written procedures in this
+          manual.
+        </p>
+        <table class="manual-table manual-table--videos">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Video</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Part 01 - Access and Sensor Setup</td>
+              <td>Open the Web UI, connect the sensor, verify port status, and upload the IODD file.</td>
+              <td>
+                <video class="manual-video" controls preload="metadata">
+                  <source src="../../../assets/videos/usage-manual/Part_01_Access_and_Sensor_Setup.mp4" type="video/mp4">
+                </video>
+              </td>
+            </tr>
+            <tr>
+              <td>Part 02 - IO-Link Data Mapping</td>
+              <td>Create process-data and ISDU endpoints, then verify their Modbus register values.</td>
+              <td>
+                <video class="manual-video" controls preload="metadata">
+                  <source src="../../../assets/videos/usage-manual/Part_02_IO-Link_Data_Mapping.mp4" type="video/mp4">
+                </video>
+              </td>
+            </tr>
+            <tr>
+              <td>Part 03 - Endpoint Management</td>
+              <td>Search, filter, update, disable, enable, and delete IO-Link endpoints; observe write logs and port controls.</td>
+              <td>
+                <video class="manual-video" controls preload="metadata">
+                  <source src="../../../assets/videos/usage-manual/Part_03_Endpoint_Management.mp4" type="video/mp4">
+                </video>
+              </td>
+            </tr>
+            <tr>
+              <td>Part 04 - Modbus Configuration</td>
+              <td>Create and manage registers, reset configurations, update the Modbus server, and write ISDU values from a Modbus client.</td>
+              <td>
+                <video class="manual-video" controls preload="metadata">
+                  <source src="../../../assets/videos/usage-manual/Part_04_Modbus_Configuration.mp4" type="video/mp4">
+                </video>
+              </td>
+            </tr>
+            <tr>
+              <td>Part 05 - Settings and Monitoring</td>
+              <td>Update general and network settings, review logs, and open the Help page.</td>
+              <td>
+                <video class="manual-video" controls preload="metadata">
+                  <source src="../../../assets/videos/usage-manual/Part_05_Settings_and_Monitoring.mp4" type="video/mp4">
+                </video>
+              </td>
+            </tr>
+            <tr>
+              <td>Part 06 - Backup and Device Cloning</td>
+              <td>Download and upload PersistentData.bin to back up settings or clone a configured device.</td>
+              <td>
+                <video class="manual-video" controls preload="metadata">
+                  <source src="../../../assets/videos/usage-manual/Part_06_Backup_and_Device_Cloning.mp4" type="video/mp4">
+                </video>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
       <section id="overview" class="manual-section">
-        <h2>What The Application Does</h2>
+        <h2>Part 2 - Understand The Application</h2>
         <p>
           The application runs on a SICK SIM300 device. It connects IO-Link data
           with a Modbus TCP server so that a PLC, SCADA system, or other Modbus
@@ -85,6 +183,27 @@
           IO-Link device into Modbus registers. Destination endpoints move
           Modbus write values back to an IO-Link device.
         </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Data Direction</th>
+              <th>What It Means</th>
+              <th>Typical Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>IO-Link to Modbus</td>
+              <td>The application reads a selected IO-Link value and updates a linked Modbus register.</td>
+              <td>A PLC reads sensor data from the SIM300 through Modbus TCP.</td>
+            </tr>
+            <tr>
+              <td>Modbus to IO-Link</td>
+              <td>The PLC writes to a linked Modbus register, and the application forwards the value to the IO-Link device.</td>
+              <td>A PLC sends a setting, command, or output value to an IO-Link device.</td>
+            </tr>
+          </tbody>
+        </table>
 
         <table class="manual-table">
           <thead>
@@ -105,7 +224,7 @@
       </section>
 
       <section id="version-selection" class="manual-section">
-        <h2>Choose The Correct Manual</h2>
+        <h2>Part 3 - Choose The Correct Manual</h2>
         <p>
           Use the manual version that matches the application installed on the
           SIM300. This matters because page names, fields, limits, and
@@ -138,7 +257,7 @@
       </section>
 
       <section id="before-you-start" class="manual-section">
-        <h2>Before You Start</h2>
+        <h2>Part 4 - Prepare The Work</h2>
         <p>
           Confirm these items before commissioning or changing a configuration.
         </p>
@@ -153,7 +272,7 @@
       </section>
 
       <section id="commissioning" class="manual-section">
-        <h2>Commissioning Workflow</h2>
+        <h2>Part 5 - Commission The System</h2>
         <p>
           Follow this sequence for a new installation or when rebuilding a
           configuration from zero. It keeps the work in an order that avoids
@@ -178,7 +297,7 @@
       </section>
 
       <section id="installation" class="manual-section">
-        <h2>Install The Application</h2>
+        <h2>Part 6 - Download And Install</h2>
         <p>
           Install the AppSpace application package on the SIM300 before opening
           the web UI.
@@ -223,7 +342,7 @@
       </section>
 
       <section id="access" class="manual-section">
-        <h2>Open The Web UI</h2>
+        <h2>Part 7 - Open The Web UI</h2>
         <p>
           Open a browser such as Google Chrome or Microsoft Edge and enter:
         </p>
@@ -239,7 +358,7 @@
       </section>
 
       <section id="layout" class="manual-section">
-        <h2>Understand The Screen</h2>
+        <h2>Part 8 - Understand The Screen</h2>
         <p>
           The web UI uses a fixed header and page area. The menu icon opens the
           side navigation. The status chips in the header give a quick runtime
@@ -253,7 +372,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>App Ready</td><td>The application backend is ready to process requests.</td></tr>
+            <tr><td>App Ready</td><td>The application is ready for normal operation.</td></tr>
             <tr><td>Modbus Server</td><td>The embedded Modbus TCP server is running or stopped.</td></tr>
             <tr><td>Device</td><td>The SIM300 device connection is available.</td></tr>
             <tr><td>Reload Apps</td><td>Reloads AppSpace apps after configuration changes that require a reload.</td></tr>
@@ -263,7 +382,7 @@
       </section>
 
       <section id="main-page" class="manual-section">
-        <h2>Main Page</h2>
+        <h2>Part 9 - Check Runtime Status</h2>
         <figure class="manual-figure">
           <img src="assets/screenshots/home.png" alt="Main Page showing port status, operation statistics, and write request history">
           <figcaption>Main Page with port status, operation statistics, and recent Modbus write requests.</figcaption>
@@ -322,7 +441,7 @@
       </section>
 
       <section id="modbus-configuration" class="manual-section">
-        <h2>Modbus Configuration</h2>
+        <h2>Part 10 - Configure Modbus</h2>
         <figure class="manual-figure">
           <img src="assets/screenshots/modbus-configuration.png" alt="Modbus Configuration page">
           <figcaption>Modbus Configuration page with server settings and register list.</figcaption>
@@ -341,10 +460,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>Modbus Server Port</td><td>TCP port used by the server. Default from the legacy manual is 502. Valid UI range is 1 to 65535.</td></tr>
+            <tr><td>Modbus Server Port</td><td>TCP port used by the server. Typical Modbus TCP port is 502. Allowed range is 1 to 65535.</td></tr>
             <tr><td>Ethernet Interface</td><td>Selects the SIM300 Ethernet interface, for example P1 or P2.</td></tr>
-            <tr><td>Max Connections</td><td>Maximum simultaneous Modbus client connections. Default from the legacy manual is 10. Valid UI range is 1 to 1000.</td></tr>
-            <tr><td>Transmit Timeout (ms)</td><td>Modbus communication timeout. Default from the legacy manual is 3000 ms. Valid UI range is 100 to 60000 ms.</td></tr>
+            <tr><td>Max Connections</td><td>Maximum simultaneous Modbus client connections. Typical starting value is 10. Allowed range is 1 to 1000.</td></tr>
+            <tr><td>Transmit Timeout (ms)</td><td>Modbus communication timeout. Typical starting value is 3000 ms. Allowed range is 100 to 60000 ms.</td></tr>
             <tr><td>Enabled</td><td>Enables or disables the Modbus TCP server.</td></tr>
             <tr><td>Save</td><td>Saves the server settings. Reload apps when the success notification asks for it.</td></tr>
           </tbody>
@@ -416,7 +535,7 @@
           <tbody>
             <tr>
               <td>Edit one register</td>
-              <td>Find the register, select Edit, change the required fields, submit the form, and reload apps if requested.</td>
+              <td>Find the register, select Edit, change the required fields, select Save, and reload apps if requested.</td>
             </tr>
             <tr>
               <td>Delete one register</td>
@@ -424,11 +543,11 @@
             </tr>
             <tr>
               <td>Reset registers by type</td>
-              <td>Select Reset Registers, choose a register type, submit the form, and reload apps if requested.</td>
+              <td>Select Reset Registers, choose a register type, select Submit, and reload apps if requested.</td>
             </tr>
             <tr>
               <td>Reset all registers</td>
-              <td>Select Reset Registers, keep All selected, submit the form, and reload apps if requested.</td>
+              <td>Select Reset Registers, keep All selected, select Submit, and reload apps if requested.</td>
             </tr>
           </tbody>
         </table>
@@ -451,7 +570,7 @@
       </section>
 
       <section id="iolink-endpoints" class="manual-section">
-        <h2>IO-Link Endpoints</h2>
+        <h2>Part 11 - Configure IO-Link Mappings</h2>
         <figure class="manual-figure">
           <img src="assets/screenshots/iolink-endpoint-configuration.png" alt="IO-Link Endpoint Configuration page">
           <figcaption>IO-Link Endpoint Configuration page.</figcaption>
@@ -536,7 +655,7 @@
           <li>Enter an endpoint name.</li>
           <li>Select Port, Target, and Access Type.</li>
           <li>Select a Process Data or ISDU definition from the definition browser.</li>
-          <li>For source endpoints, set the refresh duration. The legacy manual notes a minimum polling cycle of 50 ms.</li>
+          <li>For source endpoints, set the refresh duration. Use 50 ms or higher unless the project has a tested reason to use a different value.</li>
           <li>Select an existing linked Modbus register, or use Generate to create a compatible register.</li>
           <li>Check the quantity validation message.</li>
           <li>Select Create.</li>
@@ -558,7 +677,7 @@
             </tr>
             <tr>
               <td>Edit endpoint</td>
-              <td>Select Edit, update the required fields, confirm linked register validation, submit the form, and reload apps if requested.</td>
+              <td>Select Edit, update the required fields, confirm linked register validation, select Save, and reload apps if requested.</td>
             </tr>
             <tr>
               <td>Enable or disable endpoint</td>
@@ -570,11 +689,11 @@
             </tr>
             <tr>
               <td>Reset endpoints by port</td>
-              <td>Select Reset Endpoints, choose the target port, submit the form, and reload apps if requested.</td>
+              <td>Select Reset Endpoints, choose the target port, select Submit, and reload apps if requested.</td>
             </tr>
             <tr>
               <td>Reset all endpoints</td>
-              <td>Select Reset Endpoints, keep All selected, submit the form, and reload apps if requested.</td>
+              <td>Select Reset Endpoints, keep All selected, select Submit, and reload apps if requested.</td>
             </tr>
           </tbody>
         </table>
@@ -588,7 +707,7 @@
       </section>
 
       <section id="normal-operation" class="manual-section">
-        <h2>Normal Operation</h2>
+        <h2>Part 12 - Operate The System</h2>
         <p>
           During normal production use, operators usually do not need to change
           register or endpoint definitions. The most common tasks are checking
@@ -639,7 +758,7 @@
       </section>
 
       <section id="data-order" class="manual-section">
-        <h2>Data Order</h2>
+        <h2>Part 13 - Check Data Order</h2>
         <p>
           Use this section when configuring a PLC, SCADA system, or test client
           to read and write multi-byte values correctly.
@@ -681,7 +800,7 @@
       </section>
 
       <section id="application-settings" class="manual-section">
-        <h2>Application Settings</h2>
+        <h2>Part 14 - Adjust Settings</h2>
         <div class="figure-grid">
           <figure class="manual-figure">
             <img src="assets/screenshots/application-settings-general.png" alt="Application Settings General tab">
@@ -701,15 +820,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>Modbus Write Historian - Record Limit</td><td>Maximum number of stored write request records. UI range is 0 to 10000. Legacy default is 500 records.</td></tr>
-            <tr><td>Application Logging - Data Maximum Storage</td><td>Maximum storage for application logs. Current UI range is 0 to 10 MB. Legacy manual default is 1 MB.</td></tr>
+            <tr><td>Modbus Write Historian - Record Limit</td><td>Maximum number of stored write request records. Allowed range is 0 to 10000. A practical starting value is 500 records.</td></tr>
+            <tr><td>Application Logging - Data Maximum Storage</td><td>Maximum storage for application logs. Allowed range is 0 to 10 MB. A practical starting value is 1 MB.</td></tr>
             <tr><td>Network Settings</td><td>Embedded Device Control Center page for network interface settings.</td></tr>
           </tbody>
         </table>
       </section>
 
       <section id="logs" class="manual-section">
-        <h2>Log Monitoring</h2>
+        <h2>Part 15 - Review Logs</h2>
         <figure class="manual-figure">
           <img src="assets/screenshots/log-monitoring.png" alt="Log Monitoring page">
           <figcaption>Application Logger embedded in the Log Monitoring page.</figcaption>
@@ -722,7 +841,7 @@
       </section>
 
       <section id="help" class="manual-section">
-        <h2>Help</h2>
+        <h2>Part 16 - Open Help Links</h2>
         <figure class="manual-figure">
           <img src="assets/screenshots/help.png" alt="Help page with reference links">
           <figcaption>Help page with reference links.</figcaption>
@@ -735,7 +854,7 @@
       </section>
 
       <section id="backup" class="manual-section">
-        <h2>Backup And Clone Settings</h2>
+        <h2>Part 17 - Back Up And Clone</h2>
         <p>
           Use the SIM300 File Manager when you need to back up the current
           configuration or copy the same settings to another SIM300 device.
@@ -765,7 +884,7 @@
       </section>
 
       <section id="system-checks" class="manual-section">
-        <h2>System Checks</h2>
+        <h2>Part 18 - Final System Checks</h2>
         <table class="manual-table">
           <thead>
             <tr>
@@ -775,8 +894,8 @@
           </thead>
           <tbody>
             <tr><td>Compatible application version for this manual</td><td>1.1.0</td></tr>
-            <tr><td>SIM300 firmware referenced by legacy manual</td><td>1.2.0</td></tr>
-            <tr><td>Minimum IO-Link data polling cycle noted by legacy manual</td><td>50 ms</td></tr>
+            <tr><td>Compatible SIM300 firmware</td><td>1.2.0</td></tr>
+            <tr><td>Recommended minimum IO-Link data polling cycle</td><td>50 ms</td></tr>
             <tr><td>Maximum write historian entries</td><td>10000 records</td></tr>
             <tr><td>Application log storage range in current UI</td><td>0 to 10 MB</td></tr>
           </tbody>
@@ -789,7 +908,7 @@
       </section>
 
       <section id="troubleshooting" class="manual-section">
-        <h2>Troubleshooting</h2>
+        <h2>Part 19 - Troubleshooting</h2>
         <p>
           Start troubleshooting from the Main Page. It shows the fastest status
           indicators for the app, Modbus server, SIM300 device connection, and
@@ -816,7 +935,7 @@
             </tr>
             <tr>
               <td>App Ready is not healthy</td>
-              <td>Application startup or backend initialization problem.</td>
+              <td>Application startup or initialization problem.</td>
               <td>Open Log Monitoring, check recent errors, then reload apps or restart the application if required by local service procedure.</td>
             </tr>
             <tr>
@@ -846,7 +965,7 @@
             </tr>
             <tr>
               <td>Cannot save endpoint with linked register</td>
-              <td>Linked register quantity does not match endpoint-required quantity, or the register is already linked to another endpoint.</td>
+              <td>Linked register quantity does not match the quantity required by the endpoint, or the register is already linked to another endpoint.</td>
               <td>Select Generate where available, or create a register with the exact required quantity and no existing endpoint link.</td>
             </tr>
             <tr>
@@ -864,7 +983,7 @@
       </section>
 
       <section id="glossary" class="manual-section">
-        <h2>Glossary</h2>
+        <h2>Reference - Glossary</h2>
         <table class="manual-table">
           <thead>
             <tr>
@@ -889,7 +1008,7 @@
       </section>
 
       <section id="release-notes" class="manual-section">
-        <h2>Release Notes</h2>
+        <h2>Reference - Release Notes</h2>
         <table class="manual-table">
           <thead>
             <tr>
@@ -902,15 +1021,14 @@
             <tr>
               <td>1.0.0</td>
               <td>2025-10-01</td>
-              <td>Initial release with Modbus TCP server settings, register management, IO-Link endpoint management, IODD-based validation, source polling, destination write flow, runtime status indicators, logs, and Angular web UI.</td>
+              <td>Initial release with Modbus TCP server settings, register management, IO-Link endpoint management, IODD-based validation, source polling, destination write flow, runtime status indicators, logs, and web UI.</td>
             </tr>
           </tbody>
         </table>
         <p>
-          This manual was prepared from the current application web UI, the
-          application source, the project changelog, and the earlier
-          installation and operating manual. When the application changes, create
-          a new manual version instead of overwriting this one.
+          Use the manual version that matches the installed application version.
+          When the application is upgraded, use the matching newer manual if one
+          is available.
         </p>
       </section>
     </main>

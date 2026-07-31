@@ -255,6 +255,21 @@ h1 {
   border-bottom: 0;
 }
 
+.manual-table--videos td:last-child {
+  width: min(420px, 44vw);
+}
+
+.manual-video {
+  display: block;
+  width: 100%;
+  min-width: 260px;
+  max-width: 420px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #111;
+}
+
 .manual-note,
 .manual-warning {
   margin: 18px 0;
@@ -389,5 +404,36 @@ h1 {
 
   .manual-page .hero-media {
     grid-template-columns: 1fr;
+  }
+
+  .manual-table--videos,
+  .manual-table--videos thead,
+  .manual-table--videos tbody,
+  .manual-table--videos tr,
+  .manual-table--videos th,
+  .manual-table--videos td {
+    display: block;
+    width: 100%;
+  }
+
+  .manual-table--videos thead {
+    display: none;
+  }
+
+  .manual-table--videos tr {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .manual-table--videos td {
+    border-bottom: 0;
+  }
+
+  .manual-table--videos td:last-child {
+    width: 100%;
+  }
+
+  .manual-video {
+    min-width: 0;
+    max-width: none;
   }
 }
