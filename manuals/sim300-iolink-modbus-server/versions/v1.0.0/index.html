@@ -82,8 +82,8 @@
         <li><a href="#access">Part 7 - Open The Web UI</a></li>
         <li><a href="#layout">Part 8 - Understand The Screen</a></li>
         <li><a href="#main-page">Part 9 - Check Runtime Status</a></li>
-        <li><a href="#modbus-configuration">Part 10 - Configure Modbus</a></li>
-        <li><a href="#iolink-endpoints">Part 11 - Configure IO-Link Mappings</a></li>
+        <li><a href="#iolink-endpoints">Part 10 - Configure IO-Link Mappings</a></li>
+        <li><a href="#modbus-configuration">Part 11 - Configure Modbus</a></li>
         <li><a href="#normal-operation">Part 12 - Operate The System</a></li>
         <li><a href="#data-order">Part 13 - Check Data Order</a></li>
         <li><a href="#application-settings">Part 14 - Adjust Settings</a></li>
@@ -350,7 +350,7 @@
         <p>
           Example used while preparing this manual:
         </p>
-        <pre><code>http://192.168.100.136:8080/#/home?msdd=App.msdd</code></pre>
+        <pre><code>http://192.168.0.100:8080/#/home?msdd=App.msdd</code></pre>
         <p>
           If the SICK login page appears, sign in with a permitted user account.
           After login, the web UI opens the Main Page.
@@ -440,8 +440,146 @@
         </table>
       </section>
 
+      <section id="iolink-endpoints" class="manual-section">
+        <h2>Part 10 - Configure IO-Link Mappings</h2>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/iolink-endpoint-configuration.png" alt="IO-Link Endpoint Configuration page">
+          <figcaption>IO-Link Endpoint Configuration page.</figcaption>
+        </figure>
+
+        <p>
+          An endpoint tells the application which IO-Link value to read or
+          write. An endpoint may use Process Data or ISDU access. It can be
+          linked to a Modbus register so that external Modbus clients can access
+          that IO-Link value.
+        </p>
+
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Endpoint Name</td><td>Operator-friendly name for the mapping.</td></tr>
+            <tr><td>Port</td><td>SIM300 IO-Link port, normally S1 to S8.</td></tr>
+            <tr><td>Target</td><td>Direction of the data flow, Sensor to Device or Device to Sensor.</td></tr>
+            <tr><td>Access Type</td><td>Process Data or Indexed Service Data Unit.</td></tr>
+            <tr><td>Enabled</td><td>Controls whether the endpoint participates in runtime operation.</td></tr>
+            <tr><td>Refresh Duration</td><td>Polling interval in milliseconds for Sensor to Device endpoints. For Device to Sensor endpoints that read or write Process Data OUT or ISDU values, the polling cycle time is fixed at 5000 ms.</td></tr>
+            <tr><td>Endpoint Info</td><td>Process-data offset/block or ISDU index/subindex information.</td></tr>
+            <tr><td>Linked Register Memory Info</td><td>The Modbus register linked to this endpoint.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="figure-grid">
+          <figure class="manual-figure">
+            <img src="assets/screenshots/modal-create-iolink-endpoint.png" alt="Create IO-Link Endpoint dialog">
+            <figcaption>Create IO-Link Endpoint dialog.</figcaption>
+          </figure>
+          <figure class="manual-figure">
+            <img src="assets/screenshots/modal-reset-iolink-endpoints.png" alt="Reset Endpoints dialog">
+            <figcaption>Reset Endpoints dialog.</figcaption>
+          </figure>
+        </div>
+
+        <h3>Prepare IODD Files</h3>
+        <p>
+          Upload the correct IODD file before creating endpoints for a connected
+          sensor. Without IODD metadata, the application may not be able to show
+          valid Process Data or ISDU definitions.
+        </p>
+        <p>
+          You can open the IODD Interpreter directly with this URL:
+        </p>
+        <pre><code>http://&lt;device-ip-address&gt;:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code></pre>
+        <p>
+          Example:
+        </p>
+        <pre><code>http://192.168.0.100:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code></pre>
+        <figure class="manual-figure">
+          <img src="assets/screenshots/iodd-interpreter.png" alt="IODD Interpreter page with Upload IODD XML control">
+          <figcaption>IODD Interpreter page used to upload and manage IODD XML files.</figcaption>
+        </figure>
+        <ol class="procedure">
+          <li>Open the IODD Interpreter page from the direct URL, the Upload link on the Main Page, or the platform menu.</li>
+          <li>Sign in if the SICK login page appears.</li>
+          <li>Select Upload IODD or Upload IODD XML.</li>
+          <li>Select the correct IODD <code>.xml</code> file for the sensor connected to the SIM300 port.</li>
+          <li>Wait until the upload finishes and the IODD is listed or accepted by the page.</li>
+          <li>Return to the SIM300 IO-Link Modbus TCP Server application.</li>
+          <li>Open the Main Page and confirm that the related port changes to IODD Available/Updated.</li>
+          <li>Open IO-Link Endpoints and refresh definitions if the endpoint form was already open.</li>
+        </ol>
+        <div class="manual-note">
+          <strong>Use the matching IODD</strong>
+          The IODD file should match the connected sensor vendor, device, and
+          version information. If the wrong IODD is uploaded, endpoint
+          definitions may be missing or validation may fail.
+        </div>
+
+        <h3>Create An Endpoint</h3>
+        <ol class="procedure">
+          <li>Open IO-Link Endpoints.</li>
+          <li>Select Create Endpoint.</li>
+          <li>Enter an endpoint name.</li>
+          <li>Select Port, Target, and Access Type.</li>
+          <li>Select a Process Data or ISDU definition from the definition browser.</li>
+          <li>For Sensor to Device endpoints, set the refresh duration. Use 50 ms or higher unless the project has a tested reason to use a different value.</li>
+          <li>For Device to Sensor endpoints used for Process Data OUT or ISDU read/write access, note that the polling cycle time is fixed at 5000 ms.</li>
+          <li>Select an existing linked Modbus register, or use Generate to create a compatible register.</li>
+          <li>Check the quantity validation message.</li>
+          <li>Select Create.</li>
+          <li>Reload apps if the success notification asks for it.</li>
+        </ol>
+
+        <h3>View, Edit, Delete, Reset, Or Enable Endpoints</h3>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Procedure</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>View endpoint details</td>
+              <td>Find the endpoint in the list, select View, and review port, target, access type, endpoint info, refresh duration, enabled state, and linked register information.</td>
+            </tr>
+            <tr>
+              <td>Edit endpoint</td>
+              <td>Select Edit, update the required fields, confirm linked register validation, select Save, and reload apps if requested.</td>
+            </tr>
+            <tr>
+              <td>Enable or disable endpoint</td>
+              <td>Use the checkbox in the Enabled column, review the confirmation prompt, and select Send to confirm.</td>
+            </tr>
+            <tr>
+              <td>Delete endpoint</td>
+              <td>Select Delete, review the confirmation prompt, and select Send to confirm.</td>
+            </tr>
+            <tr>
+              <td>Reset endpoints by port</td>
+              <td>Select Reset Endpoints, choose the target port, select Submit, and reload apps if requested.</td>
+            </tr>
+            <tr>
+              <td>Reset all endpoints</td>
+              <td>Select Reset Endpoints, keep All selected, select Submit, and reload apps if requested.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="manual-warning">
+          <strong>Mapping rule</strong>
+          One linked Modbus register can only be assigned to one IO-Link
+          endpoint. The linked register quantity must exactly match the quantity
+          required by the selected endpoint definition.
+        </div>
+      </section>
+
       <section id="modbus-configuration" class="manual-section">
-        <h2>Part 10 - Configure Modbus</h2>
+        <h2>Part 11 - Configure Modbus</h2>
         <figure class="manual-figure">
           <img src="assets/screenshots/modbus-configuration.png" alt="Modbus Configuration page">
           <figcaption>Modbus Configuration page with server settings and register list.</figcaption>
@@ -567,143 +705,6 @@
             <tr><td>Input Register</td><td>Read: FC 04 Read Input Registers. Write: not supported.</td></tr>
           </tbody>
         </table>
-      </section>
-
-      <section id="iolink-endpoints" class="manual-section">
-        <h2>Part 11 - Configure IO-Link Mappings</h2>
-        <figure class="manual-figure">
-          <img src="assets/screenshots/iolink-endpoint-configuration.png" alt="IO-Link Endpoint Configuration page">
-          <figcaption>IO-Link Endpoint Configuration page.</figcaption>
-        </figure>
-
-        <p>
-          An endpoint tells the application which IO-Link value to read or
-          write. An endpoint may use Process Data or ISDU access. It can be
-          linked to a Modbus register so that external Modbus clients can access
-          that IO-Link value.
-        </p>
-
-        <table class="manual-table">
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Meaning</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Endpoint Name</td><td>Operator-friendly name for the mapping.</td></tr>
-            <tr><td>Port</td><td>SIM300 IO-Link port, normally S1 to S8.</td></tr>
-            <tr><td>Target</td><td>Direction of the data flow, Sensor to Device or Device to Sensor.</td></tr>
-            <tr><td>Access Type</td><td>Process Data or Indexed Service Data Unit.</td></tr>
-            <tr><td>Enabled</td><td>Controls whether the endpoint participates in runtime operation.</td></tr>
-            <tr><td>Refresh Duration</td><td>Polling interval in milliseconds for source-type endpoints.</td></tr>
-            <tr><td>Endpoint Info</td><td>Process-data offset/block or ISDU index/subindex information.</td></tr>
-            <tr><td>Linked Register Memory Info</td><td>The Modbus register linked to this endpoint.</td></tr>
-          </tbody>
-        </table>
-
-        <div class="figure-grid">
-          <figure class="manual-figure">
-            <img src="assets/screenshots/modal-create-iolink-endpoint.png" alt="Create IO-Link Endpoint dialog">
-            <figcaption>Create IO-Link Endpoint dialog.</figcaption>
-          </figure>
-          <figure class="manual-figure">
-            <img src="assets/screenshots/modal-reset-iolink-endpoints.png" alt="Reset Endpoints dialog">
-            <figcaption>Reset Endpoints dialog.</figcaption>
-          </figure>
-        </div>
-
-        <h3>Prepare IODD Files</h3>
-        <p>
-          Upload the correct IODD file before creating endpoints for a connected
-          sensor. Without IODD metadata, the application may not be able to show
-          valid Process Data or ISDU definitions.
-        </p>
-        <p>
-          You can open the IODD Interpreter directly with this URL:
-        </p>
-        <pre><code>http://&lt;device-ip-address&gt;:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code></pre>
-        <p>
-          Example:
-        </p>
-        <pre><code>http://192.168.100.136:8080/#!msdd=CSK_Module_IODDInterpreter&amp;page=IODDInterpreter</code></pre>
-        <figure class="manual-figure">
-          <img src="assets/screenshots/iodd-interpreter.png" alt="IODD Interpreter page with Upload IODD XML control">
-          <figcaption>IODD Interpreter page used to upload and manage IODD XML files.</figcaption>
-        </figure>
-        <ol class="procedure">
-          <li>Open the IODD Interpreter page from the direct URL, the Upload link on the Main Page, or the platform menu.</li>
-          <li>Sign in if the SICK login page appears.</li>
-          <li>Select Upload IODD or Upload IODD XML.</li>
-          <li>Select the correct IODD <code>.xml</code> file for the sensor connected to the SIM300 port.</li>
-          <li>Wait until the upload finishes and the IODD is listed or accepted by the page.</li>
-          <li>Return to the SIM300 IO-Link Modbus TCP Server application.</li>
-          <li>Open the Main Page and confirm that the related port changes to IODD Available/Updated.</li>
-          <li>Open IO-Link Endpoints and refresh definitions if the endpoint form was already open.</li>
-        </ol>
-        <div class="manual-note">
-          <strong>Use the matching IODD</strong>
-          The IODD file should match the connected sensor vendor, device, and
-          version information. If the wrong IODD is uploaded, endpoint
-          definitions may be missing or validation may fail.
-        </div>
-
-        <h3>Create An Endpoint</h3>
-        <ol class="procedure">
-          <li>Open IO-Link Endpoints.</li>
-          <li>Select Create Endpoint.</li>
-          <li>Enter an endpoint name.</li>
-          <li>Select Port, Target, and Access Type.</li>
-          <li>Select a Process Data or ISDU definition from the definition browser.</li>
-          <li>For source endpoints, set the refresh duration. Use 50 ms or higher unless the project has a tested reason to use a different value.</li>
-          <li>Select an existing linked Modbus register, or use Generate to create a compatible register.</li>
-          <li>Check the quantity validation message.</li>
-          <li>Select Create.</li>
-          <li>Reload apps if the success notification asks for it.</li>
-        </ol>
-
-        <h3>View, Edit, Delete, Reset, Or Enable Endpoints</h3>
-        <table class="manual-table">
-          <thead>
-            <tr>
-              <th>Task</th>
-              <th>Procedure</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>View endpoint details</td>
-              <td>Find the endpoint in the list, select View, and review port, target, access type, endpoint info, refresh duration, enabled state, and linked register information.</td>
-            </tr>
-            <tr>
-              <td>Edit endpoint</td>
-              <td>Select Edit, update the required fields, confirm linked register validation, select Save, and reload apps if requested.</td>
-            </tr>
-            <tr>
-              <td>Enable or disable endpoint</td>
-              <td>Use the checkbox in the Enabled column, review the confirmation prompt, and select Send to confirm.</td>
-            </tr>
-            <tr>
-              <td>Delete endpoint</td>
-              <td>Select Delete, review the confirmation prompt, and select Send to confirm.</td>
-            </tr>
-            <tr>
-              <td>Reset endpoints by port</td>
-              <td>Select Reset Endpoints, choose the target port, select Submit, and reload apps if requested.</td>
-            </tr>
-            <tr>
-              <td>Reset all endpoints</td>
-              <td>Select Reset Endpoints, keep All selected, select Submit, and reload apps if requested.</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="manual-warning">
-          <strong>Mapping rule</strong>
-          One linked Modbus register can only be assigned to one IO-Link
-          endpoint. The linked register quantity must exactly match the quantity
-          required by the selected endpoint definition.
-        </div>
       </section>
 
       <section id="normal-operation" class="manual-section">
@@ -875,11 +876,14 @@
         <h3>Clone Settings To Another Device</h3>
         <ol class="procedure">
           <li>Confirm the target SIM300 uses the same application version and a compatible firmware environment.</li>
-          <li>Open File Manager on the target SIM300.</li>
+          <li>Open App Manager or Sentio Creator application on the PC.</li>
+          <li>Select the target SIM300 device.</li>
+          <li>Stop all apps.</li>
+          <li>Open the App data tab.</li>
           <li>Go to the <code>/public</code> folder.</li>
           <li>If <code>CSK_PersistentData.bin</code> already exists, delete it first.</li>
           <li>Upload the backup <code>CSK_PersistentData.bin</code> file.</li>
-          <li>Reload apps so the uploaded configuration is applied.</li>
+          <li>Start all apps again.</li>
         </ol>
       </section>
 
@@ -896,6 +900,7 @@
             <tr><td>Compatible application version for this manual</td><td>1.1.0</td></tr>
             <tr><td>Compatible SIM300 firmware</td><td>1.2.0</td></tr>
             <tr><td>Recommended minimum IO-Link data polling cycle</td><td>50 ms</td></tr>
+            <tr><td>Device to Sensor Process Data OUT or ISDU polling cycle</td><td>Fixed at 5000 ms</td></tr>
             <tr><td>Maximum write historian entries</td><td>10000 records</td></tr>
             <tr><td>Application log storage range in current UI</td><td>0 to 10 MB</td></tr>
           </tbody>
@@ -1018,6 +1023,11 @@
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td>1.1.0</td>
+              <td>2026-07-30</td>
+              <td>Improved IO-Link mapping for byte, bit, and full process data; automatic Modbus register generation; fallback Process Data IN/OUT mappings when no IODD is available; fixed 5-second Device to Sensor refresh; easier Help and IODD Interpreter access.</td>
+            </tr>
             <tr>
               <td>1.0.0</td>
               <td>2025-10-01</td>
