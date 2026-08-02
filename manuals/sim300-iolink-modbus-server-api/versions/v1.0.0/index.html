@@ -92,8 +92,8 @@
           service PC. Postman makes it easier to set request URLs, JSON bodies,
           timeouts, and the required <code>Cookie: access_token=...</code>
           header. For the login request, also set <code>Accept</code> to
-          <code>application/json</code>. cURL and PowerShell are also suitable
-          when command-line testing is preferred.
+          <code>application/json</code>. cURL is also suitable when command-line
+          testing is preferred.
         </div>
         <div class="manual-warning">
           <strong>Do not use these APIs for high-frequency data polling</strong>
@@ -151,23 +151,6 @@ Content-Type: application/json
   -H "Cookie: access_token=eyJhb..." ^
   -d "{\"data\":{}}"</code></pre>
 
-        <h3>PowerShell Example</h3>
-        <pre><code>$headers = @{
-  "Accept" = "application/json"
-  "Content-Type" = "application/json"
-  "Cookie" = "access_token=eyJhb..."
-}
-
-$body = @{
-  data = @{}
-} | ConvertTo-Json -Depth 5
-
-Invoke-RestMethod `
-  -Method Post `
-  -Uri "http://&lt;device-ip&gt;:8080/api/crown/App/getModbusRegisters" `
-  -Headers $headers `
-  -Body $body `
-  -TimeoutSec 60</code></pre>
       </section>
 
       <section id="request-format" class="manual-section">
