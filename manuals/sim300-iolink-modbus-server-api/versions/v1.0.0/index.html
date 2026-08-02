@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SIM300 IO-Link Modbus TCP Server API Manual v1.0.0</title>
+    <link rel="icon" type="image/jpeg" href="../../../assets/images/sick-logo.jpg">
+    <link rel="stylesheet" href="../../../assets/site/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="../../../index.html">
+          <img class="brand__logo" src="../../../assets/images/sick-logo.jpg" alt="SICK">
+          <span>SIM300 IO-Link Modbus TCP Server</span>
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="../../../index.html">Manuals</a>
+          <a href="../versions.html">Versions</a>
+          <a href="../../../usage-manual/index.html">Usage Manual</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main manual-page">
+      <section class="hero">
+        <p class="eyebrow">API Manual v1.0.0</p>
+        <h1>SIM300 IO-Link Modbus TCP Server API Manual</h1>
+        <p class="lead">
+          Practical REST API and CROWN API reference for integrators, OT
+          engineers, service engineers, and application engineers who need to
+          check device health, read configuration, adjust settings, and manage
+          IO-Link to Modbus mappings.
+        </p>
+        <div class="manual-page__logo-row" aria-label="Related logos">
+          <img src="../../../assets/images/io-link-logo.png" alt="IO-Link">
+          <img src="../../../assets/images/modbus-logo.png" alt="Modbus">
+        </div>
+      </section>
+
+      <section class="manual-section">
+        <h2>Manual Scope</h2>
+        <table class="manual-table">
+          <tbody>
+            <tr><td>Manual version</td><td>1.0.0</td></tr>
+            <tr><td>Compatible application version</td><td>1.1.0</td></tr>
+            <tr><td>Compatible SIM300 firmware</td><td>1.2.0</td></tr>
+            <tr><td>Main API base URL</td><td><code>http://&lt;device-ip&gt;:8080</code></td></tr>
+            <tr><td>CROWN API base URL</td><td><code>http://&lt;device-ip&gt;:8080/api/crown/App</code></td></tr>
+          </tbody>
+        </table>
+        <div class="manual-warning">
+          <strong>Use API changes carefully</strong>
+          Configuration changes can stop data flow if values are wrong. Read
+          the current configuration first, change one area at a time, check the
+          response, and reload apps after configuration updates.
+        </div>
+      </section>
+
+      <h2>Contents</h2>
+      <ul class="manual-toc">
+        <li><a href="#quick-start">Part 1 - Quick Start</a></li>
+        <li><a href="#authentication">Part 2 - Sign In And Use The Token</a></li>
+        <li><a href="#request-format">Part 3 - Understand Request Format</a></li>
+        <li><a href="#device-health">Part 4 - Device Health APIs</a></li>
+        <li><a href="#ids">Part 5 - Common ID Values</a></li>
+        <li><a href="#catalogue">Part 6 - CROWN API Catalogue</a></li>
+        <li><a href="#use-cases">Part 7 - Common Use Cases</a></li>
+        <li><a href="#reload">Part 8 - Reload Apps After Changes</a></li>
+        <li><a href="#troubleshooting">Part 9 - Troubleshooting</a></li>
+      </ul>
+
+      <section id="quick-start" class="manual-section">
+        <h2>Part 1 - Quick Start</h2>
+        <ol class="procedure">
+          <li>Confirm that the PC can reach the SIM300 device over the network.</li>
+          <li>Sign in with <code>POST /auth/login</code> and copy the returned token.</li>
+          <li>Send later requests with the HTTP header <code>Cookie: access_token=&lt;token&gt;</code>.</li>
+          <li>Use <code>GET /api/v1/system/info</code> or <code>GET /api/v1/system/monitor/stats</code> to confirm the device is reachable and healthy.</li>
+          <li>Read current app data before changing anything, for example <code>getModbusRegisters</code> and <code>getIOLinkEndpoints</code>.</li>
+          <li>For configuration changes, call the related update, create, delete, or reset API.</li>
+          <li>Call <code>reloadApps</code> after configuration changes so the runtime uses the saved configuration.</li>
+        </ol>
+        <p>
+          A request can take up to one minute when the device is operating under
+          heavy workload. Set the request timeout in your REST client to at
+          least 60 seconds.
+        </p>
+        <div class="manual-note">
+          <strong>Recommended testing tool</strong>
+          For manual API testing, install an API client such as Postman on the
+          service PC. Postman makes it easier to set request URLs, JSON bodies,
+          timeouts, and the required <code>Cookie: access_token=...</code>
+          header. For the login request, also set <code>Accept</code> to
+          <code>application/json</code>. cURL and PowerShell are also suitable
+          when command-line testing is preferred.
+        </div>
+        <div class="manual-warning">
+          <strong>Do not use these APIs for high-frequency data polling</strong>
+          The APIs are intended for remote checks, configuration changes,
+          service updates, and occasional value reads or writes. They are not
+          intended for highly frequent data fetching. Frequent API polling can
+          consume SIM300 processing resources and negatively affect other
+          runtime work, including IO-Link endpoint polling and Modbus register
+          value updates.
+        </div>
+      </section>
+
+      <section id="authentication" class="manual-section">
+        <h2>Part 2 - Sign In And Use The Token</h2>
+        <p>
+          The SIM300 API requires an access token. First send a login request.
+          Do not put usernames, passwords, or tokens into shared documents,
+          screenshots, or source code.
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "&lt;username&gt;",
+  "password": "&lt;password&gt;",
+  "realm": "admin"
+}</code></pre>
+        <p>
+          Use <code>"admin"</code> or <code>"users"</code> for <code>realm</code>,
+          depending on the account type provided by the device administrator.
+        </p>
+        <p>
+          The login request must include <code>Accept: application/json</code>
+          so the device returns the token as JSON.
+        </p>
+        <p>Typical login response:</p>
+        <pre><code>{
+  "token": "eyJhb...",
+  "token_name": "access_token"
+}</code></pre>
+        <p>
+          For all later API requests, add the token as a cookie header:
+        </p>
+        <pre><code>Cookie: access_token=eyJhb...</code></pre>
+        <p>
+          In Postman, add this value in the Headers tab with key
+          <code>Cookie</code> and value <code>access_token=eyJhb...</code>.
+        </p>
+
+        <h3>cURL Example</h3>
+        <pre><code>curl -X POST "http://&lt;device-ip&gt;:8080/api/crown/App/getModbusRegisters" ^
+  -H "Accept: application/json" ^
+  -H "Content-Type: application/json" ^
+  -H "Cookie: access_token=eyJhb..." ^
+  -d "{\"data\":{}}"</code></pre>
+
+        <h3>PowerShell Example</h3>
+        <pre><code>$headers = @{
+  "Accept" = "application/json"
+  "Content-Type" = "application/json"
+  "Cookie" = "access_token=eyJhb..."
+}
+
+$body = @{
+  data = @{}
+} | ConvertTo-Json -Depth 5
+
+Invoke-RestMethod `
+  -Method Post `
+  -Uri "http://&lt;device-ip&gt;:8080/api/crown/App/getModbusRegisters" `
+  -Headers $headers `
+  -Body $body `
+  -TimeoutSec 60</code></pre>
+      </section>
+
+      <section id="request-format" class="manual-section">
+        <h2>Part 3 - Understand Request Format</h2>
+        <p>
+          Application CROWN APIs use the same URL pattern:
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/&lt;api-name&gt;</code></pre>
+        <p>
+          The request body has a top-level <code>data</code> object. Put function
+          parameters inside this object.
+        </p>
+        <pre><code>{
+  "data": {
+    "id": 1,
+    "payload": "{\"refreshDuration\":1000}"
+  }
+}</code></pre>
+        <div class="manual-note">
+          <strong>Payload is a JSON string</strong>
+          Many update and create APIs use a parameter named <code>payload</code>.
+          In the request body, <code>payload</code> must be a text string that
+          contains JSON. This is why quotation marks inside the payload are
+          escaped as <code>\"</code>.
+        </div>
+        <p>
+          A normal CROWN response has a <code>header</code> and a <code>data</code>
+          section. If <code>header.status</code> is <code>0</code> and
+          <code>data.success</code> is <code>true</code>, the API call succeeded.
+        </p>
+        <pre><code>{
+  "header": {
+    "status": 0,
+    "message": "Ok"
+  },
+  "data": {
+    "data": "{\"id\":1,\"name\":\"S7 MDC\"}",
+    "success": true,
+    "message": "OK"
+  }
+}</code></pre>
+        <p>
+          For many APIs, <code>data.data</code> is also a JSON string. If your
+          tool needs to inspect individual fields, parse that string once more.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Rule</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>HTTP method</td><td>Use <code>POST</code> for CROWN APIs. Use <code>GET</code> for the system health APIs.</td></tr>
+            <tr><td>API name</td><td>Use the function name from the manifest, but remove any leading underscore. Example: <code>_readModbusRegister</code> becomes <code>readModbusRegister</code>.</td></tr>
+            <tr><td>Events</td><td>Manifest events are websocket topics. They are not listed as REST APIs in this manual.</td></tr>
+            <tr><td><code>NUM</code> suffix</td><td>For advanced runtime APIs, replace <code>NUM</code> with the actual generated number, usually the IO-Link port number. Example: <code>getIODDDefinitionsNUM</code> can become <code>getIODDDefinitions7</code>.</td></tr>
+            <tr><td>Timeout</td><td>Use a timeout of at least 60 seconds.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="device-health" class="manual-section">
+        <h2>Part 4 - Device Health APIs</h2>
+        <p>
+          These APIs are provided by the SIM300 platform. They are useful before
+          and after configuration changes, especially when the device is under
+          load. They also require the same access-token cookie.
+        </p>
+
+        <h3>Get Device Information</h3>
+        <pre><code>GET http://&lt;device-ip&gt;:8080/api/v1/system/info
+Cookie: access_token=eyJhb...</code></pre>
+        <pre><code>{
+  "deviceType": "SIG300-0P0GAA100",
+  "firmwareVersion": "1.2.0.1371",
+  "hardwareVersion": "",
+  "identity": {
+    "instanceId": "12345678",
+    "productId": "pid.sick.com/1148210/12345678",
+    "typeId": "1148210"
+  },
+  "name": "SIM300-0p0gaa100-12345678",
+  "operationalIndicators": {
+    "bootCount": 0,
+    "operatingTimeSinceBoot": 0,
+    "totalOperatingTime": 0
+  },
+  "orderNumber": "1148210",
+  "serialNumber": "12345678"
+}</code></pre>
+
+        <h3>Get Device Health Statistics</h3>
+        <pre><code>GET http://&lt;device-ip&gt;:8080/api/v1/system/monitor/stats
+Cookie: access_token=eyJhb...</code></pre>
+        <pre><code>{
+  "cpu": {
+    "avgLoad15Min": 0.52,
+    "avgLoad1Min": 0.01,
+    "avgLoad5Min": 0.33,
+    "totalUsage": 14.479638,
+    "usagePerCore": [
+      {
+        "id": "core0",
+        "usage": 14.479638
+      }
+    ]
+  },
+  "memory": {
+    "free": 231928,
+    "total": 400560,
+    "used": 168632
+  },
+  "storage": {
+    "partitions": [
+      {
+        "fileSystem": "ext4",
+        "free": 2507436,
+        "id": "/datafs",
+        "total": 2674880,
+        "used": 167444
+      }
+    ]
+  },
+  "temperature": [
+    {
+      "id": "CPU_Sensor2",
+      "value": 42.002
+    },
+    {
+      "id": "CPU_Sensor1",
+      "value": 41.077
+    }
+  ]
+}</code></pre>
+      </section>
+
+      <section id="ids" class="manual-section">
+        <h2>Part 5 - Common ID Values</h2>
+        <p>
+          Several APIs use numeric IDs instead of display names. Keep this table
+          nearby when preparing request bodies.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr><th>Group</th><th>ID</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>IO-Link port</td><td>1 to 8</td><td>S1 to S8</td></tr>
+            <tr><td>Ethernet interface</td><td>1</td><td>P1</td></tr>
+            <tr><td>Ethernet interface</td><td>2</td><td>P2</td></tr>
+            <tr><td>Modbus register type</td><td>1</td><td>Coil</td></tr>
+            <tr><td>Modbus register type</td><td>2</td><td>Holding Register</td></tr>
+            <tr><td>Modbus register type</td><td>3</td><td>Discrete Input</td></tr>
+            <tr><td>Modbus register type</td><td>4</td><td>Input Register</td></tr>
+            <tr><td>Modbus data type</td><td>1</td><td>Unsigned integer</td></tr>
+            <tr><td>Modbus data type</td><td>2</td><td>Signed integer</td></tr>
+            <tr><td>Modbus data type</td><td>3</td><td>Float32</td></tr>
+            <tr><td>Modbus data type</td><td>5</td><td>Hex</td></tr>
+            <tr><td>Modbus data type</td><td>6</td><td>Boolean</td></tr>
+            <tr><td>Modbus data type</td><td>7</td><td>Binary</td></tr>
+            <tr><td>Modbus data type</td><td>8</td><td>Character string</td></tr>
+            <tr><td>IO-Link target</td><td>1</td><td>Sensor to Device. The app reads from the sensor and writes into Modbus registers.</td></tr>
+            <tr><td>IO-Link target</td><td>2</td><td>Device to Sensor. A Modbus/API write is forwarded to the sensor.</td></tr>
+            <tr><td>IO-Link access type</td><td>1</td><td>Process Data</td></tr>
+            <tr><td>IO-Link access type</td><td>2</td><td>ISDU</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="catalogue" class="manual-section">
+        <h2>Part 6 - CROWN API Catalogue</h2>
+        <p>
+          The table below is based on the App CROWN functions declared in
+          <code>project.mf.xml</code>. Websocket event topics are intentionally
+          excluded. Every API uses this URL pattern:
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/&lt;api-name&gt;</code></pre>
+
+        <h3>Application And Settings APIs</h3>
+        <table class="manual-table">
+          <thead>
+            <tr><th>API Name</th><th>Use</th><th>Body <code>data</code></th><th>Response <code>data</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>reloadApps</code></td><td>Reload all apps after saved configuration changes.</td><td><code>{}</code></td><td>No return fields in manifest. Successful CROWN header indicates request accepted.</td></tr>
+            <tr><td><code>getDeviceName</code></td><td>Read the AppEngine device type name.</td><td><code>{}</code></td><td><code>data</code> string, <code>success</code> boolean, <code>message</code> string.</td></tr>
+            <tr><td><code>getAllSettings</code></td><td>Read all saved application settings.</td><td><code>{}</code></td><td><code>data</code> JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getSettingsByKey</code></td><td>Read one saved settings group.</td><td><code>{"key":"modbusServerSettings"}</code></td><td><code>data</code> JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>updateAppSettings</code></td><td>Change general app settings such as write-history limit and log size.</td><td><code>{"payload":"{\"modbusWriteRequestHistorianEntryLimit\":10000,\"appLogMaxSizeMB\":10}"}</code></td><td>Updated settings as JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getAllDevicePortSettings</code></td><td>Read enabled state for all IO-Link ports.</td><td><code>{}</code></td><td>Port settings as JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getPortSettings</code></td><td>Read settings for one IO-Link port.</td><td><code>{"portId":7}</code></td><td>Port setting as JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>updateDevicePortSettings</code></td><td>Enable or disable one IO-Link port.</td><td><code>{"portId":7,"payload":"{\"enabled\":true}"}</code></td><td>Updated port setting as JSON string, <code>success</code>, <code>message</code>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Modbus APIs</h3>
+        <table class="manual-table">
+          <thead>
+            <tr><th>API Name</th><th>Use</th><th>Body <code>data</code></th><th>Response <code>data</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>getModbusServerInfo</code></td><td>Read Modbus TCP server settings.</td><td><code>{}</code></td><td>Server settings JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>updateModbusServerInfo</code></td><td>Change server port, Ethernet interface, connection limit, timeout, or enabled state.</td><td><code>{"payload":"{\"port\":502,\"ethInterfaceId\":1,\"maxConnection\":10,\"transmitTimeout\":3000,\"enabled\":true}"}</code></td><td>Updated server settings JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getModbusRegisters</code></td><td>List all configured Modbus registers.</td><td><code>{}</code></td><td>Register list JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getModbusRegister</code></td><td>Read one register definition.</td><td><code>{"id":1}</code></td><td>Register JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>createModbusRegister</code></td><td>Create a new register definition.</td><td><code>{"payload":"{\"name\":\"S7 MDC\",\"registerTypeId\":2,\"dataTypeId\":1,\"startAddress\":0,\"registerQuantity\":2}"}</code></td><td>Created register JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>updateModbusRegister</code></td><td>Change an existing register definition.</td><td><code>{"id":1,"payload":"{\"startAddress\":10}"}</code></td><td>Updated register JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>deleteModbusRegister</code></td><td>Delete one register definition.</td><td><code>{"id":1}</code></td><td><code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>resetModbusRegisters</code></td><td>Delete all registers or all registers of one type.</td><td><code>{}</code> or <code>{"registerTypeId":2}</code></td><td><code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>readModbusRegisters</code></td><td>Read current values from register definitions by register ID.</td><td><code>{"payload":"[{\"id\":1}]","decodeHexValue":true}</code></td><td>Value list JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>writeModbusRegisters</code></td><td>Write values to Coil or Holding Register definitions by register ID.</td><td><code>{"payload":"[{\"id\":1,\"value\":1234}]"} </code></td><td><code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>readModbusRegister</code></td><td>Advanced direct runtime read by address. Name comes from <code>_readModbusRegister</code> without underscore.</td><td><code>{"startAddress":0,"quantity":2,"type":2,"convertBinToHex":true}</code></td><td><code>data</code> string.</td></tr>
+            <tr><td><code>writeModbusRegister</code></td><td>Advanced direct runtime write using binary data. Prefer <code>writeModbusRegisters</code> for normal integration.</td><td><code>{"iolinkEndpointId":1,"registerId":1,"binValue":"&lt;binary&gt;"}</code></td><td><code>success</code> boolean.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>IO-Link APIs</h3>
+        <table class="manual-table">
+          <thead>
+            <tr><th>API Name</th><th>Use</th><th>Body <code>data</code></th><th>Response <code>data</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>getIOLinkProcessDataSize</code></td><td>Read Process Data size for one port and direction.</td><td><code>{"portId":7,"direction":"in"}</code> or <code>"out"</code></td><td><code>data</code> integer, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkProcessDataStructureOptions</code></td><td>List available Process Data structure options from IODD.</td><td><code>{"portId":7}</code></td><td>Options JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getSelectedPDStructureOption</code></td><td>Read the selected Process Data structure option.</td><td><code>{"portId":7}</code></td><td>Selected option JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkProcessDataInDefinitions</code></td><td>List Sensor to Device Process Data definitions.</td><td><code>{"portId":7}</code></td><td>Definitions JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkProcessDataOutDefinitions</code></td><td>List Device to Sensor Process Data OUT definitions.</td><td><code>{"portId":7}</code></td><td>Definitions JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkReadISDUDefinitions</code></td><td>List readable ISDU definitions for one port.</td><td><code>{"portId":7}</code></td><td>Definitions JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkWriteISDUDefinitions</code></td><td>List writable ISDU definitions for one port.</td><td><code>{"portId":7}</code></td><td>Definitions JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkEndpoints</code></td><td>List all configured IO-Link endpoints.</td><td><code>{}</code></td><td>Endpoint list JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getIOLinkEndpoint</code></td><td>Read one endpoint definition.</td><td><code>{"id":1}</code></td><td>Endpoint JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>createIOLinkEndpoint</code></td><td>Create a new IO-Link endpoint.</td><td><code>{"payload":"{\"name\":\"S7 MDC\",\"portId\":7,\"targetId\":1,\"accessTypeId\":1,\"offset\":0,\"block\":4,\"refreshDuration\":1000,\"linkedModbusRegisterId\":1}"}</code></td><td>Created endpoint JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>updateIOLinkEndpoint</code></td><td>Change an endpoint, enable/disable it, or link it to a different register.</td><td><code>{"id":1,"payload":"{\"refreshDuration\":1000}"}</code></td><td>Updated endpoint JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>deleteIOLinkEndpoint</code></td><td>Delete one endpoint.</td><td><code>{"id":1}</code></td><td><code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>resetIOLinkEndpoints</code></td><td>Delete all endpoints or all endpoints for one port.</td><td><code>{}</code> or <code>{"portId":7}</code></td><td><code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>getModbusQuantityForEndpointSource</code></td><td>Calculate the Modbus register quantity required for a planned endpoint.</td><td><code>{"portId":7,"payload":"{\"targetId\":1,\"accessTypeId\":1,\"offset\":0,\"block\":4,\"registerTypeId\":2}"}</code></td><td><code>quantity</code> integer, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>readIOLinkEndpoint</code></td><td>Read the current value for one endpoint.</td><td><code>{"id":1}</code></td><td>Value JSON string, <code>success</code>, <code>message</code>.</td></tr>
+            <tr><td><code>writeIOLinkEndpoint</code></td><td>Write a value through a Device to Sensor endpoint.</td><td><code>{"id":1,"payload":"{\"value\":1234,\"dataTypeId\":1}"}</code></td><td><code>success</code>, <code>message</code>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Advanced Runtime APIs From The Manifest</h3>
+        <table class="manual-table">
+          <thead>
+            <tr><th>API Name</th><th>Use</th><th>Body <code>data</code></th><th>Response <code>data</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>initIOLinkDataPollProcessNUM</code></td><td>Advanced internal poll-process initialization. Replace <code>NUM</code> with endpoint number if used.</td><td><code>{}</code></td><td>No return fields in manifest.</td></tr>
+            <tr><td><code>initModbusServerProcess</code></td><td>Advanced internal Modbus server initialization.</td><td><code>{}</code></td><td>No return fields in manifest.</td></tr>
+            <tr><td><code>initIOLinkMasterInstanceNUM</code></td><td>Advanced internal IO-Link master initialization. Replace <code>NUM</code> with port number.</td><td><code>{}</code></td><td>No return fields in manifest.</td></tr>
+            <tr><td><code>readProcessDataNUM</code></td><td>Advanced direct Process Data read. Replace <code>NUM</code> with port number.</td><td><code>{"offset":0,"block":4,"endpointID":1,"registerID":1}</code></td><td><code>data</code> binary.</td></tr>
+            <tr><td><code>writeProcessDataNUM</code></td><td>Advanced direct Process Data write. Replace <code>NUM</code> with port number.</td><td><code>{"offset":0,"block":4,"binValue":"&lt;binary&gt;","endpointID":1,"registerID":1}</code></td><td><code>success</code> boolean.</td></tr>
+            <tr><td><code>readISDUNUM</code></td><td>Advanced direct ISDU read. Replace <code>NUM</code> with port number.</td><td><code>{"index":80,"subIndex":0,"endpointID":1,"registerID":1}</code></td><td><code>data</code> binary.</td></tr>
+            <tr><td><code>writeISDUNUM</code></td><td>Advanced direct ISDU write. Replace <code>NUM</code> with port number.</td><td><code>{"index":80,"subIndex":0,"binValue":"&lt;binary&gt;","endpointID":1,"registerID":1}</code></td><td><code>success</code> boolean.</td></tr>
+            <tr><td><code>getIODDDefinitionsNUM</code></td><td>Advanced direct IODD definition read. Replace <code>NUM</code> with port number.</td><td><code>{}</code></td><td><code>data</code> string.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="use-cases" class="manual-section">
+        <h2>Part 7 - Common Use Cases</h2>
+
+        <h3>Use Case 1 - Check Device Identity And Health</h3>
+        <ol class="procedure">
+          <li>Sign in and set the token cookie.</li>
+          <li>Call <code>GET /api/v1/system/info</code> to confirm the correct device.</li>
+          <li>Call <code>GET /api/v1/system/monitor/stats</code> to check CPU, memory, storage, and temperature.</li>
+        </ol>
+
+        <h3>Use Case 2 - Read Current App Configuration</h3>
+        <p>
+          Use this sequence before service work or before making changes.
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/getModbusServerInfo
+{
+  "data": {}
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/getModbusRegisters
+{
+  "data": {}
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/getIOLinkEndpoints
+{
+  "data": {}
+}</code></pre>
+
+        <h3>Use Case 3 - Update One Endpoint Refresh Duration</h3>
+        <p>
+          This example changes endpoint <code>1</code> to a 1000 ms Sensor to
+          Device polling interval. After the update succeeds, reload apps.
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/updateIOLinkEndpoint
+{
+  "data": {
+    "id": 1,
+    "payload": "{\"refreshDuration\":1000}"
+  }
+}</code></pre>
+        <p>Typical response:</p>
+        <pre><code>{
+  "header": {
+    "status": 0,
+    "message": "Ok"
+  },
+  "data": {
+    "data": "{\"id\":1,\"bitOffset\":16,\"enabled\":true,\"block\":4,\"accessTypeId\":1,\"bitLength\":32,\"name\":\"S7 MDC\",\"offset\":0,\"refreshDuration\":1000,\"portId\":7,\"targetId\":1,\"linkedModbusRegisterId\":1}",
+    "success": true,
+    "message": "OK"
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/reloadApps
+{
+  "data": {}
+}</code></pre>
+        <div class="manual-note">
+          <strong>Device to Sensor timing</strong>
+          For Device to Sensor endpoints used for Process Data OUT or ISDU
+          read/write access, the polling cycle time is fixed at 5000 ms.
+        </div>
+
+        <h3>Use Case 4 - Create A Register And Link An IO-Link Endpoint</h3>
+        <p>
+          This sequence is useful when preparing a new mapping from an IO-Link
+          value to a Modbus register.
+        </p>
+        <ol class="procedure">
+          <li>Check the required Modbus register quantity for the planned endpoint.</li>
+          <li>Create the Modbus register with the required quantity.</li>
+          <li>Create the IO-Link endpoint and link it to the register ID.</li>
+          <li>Reload apps.</li>
+        </ol>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/getModbusQuantityForEndpointSource
+{
+  "data": {
+    "portId": 7,
+    "payload": "{\"targetId\":1,\"accessTypeId\":1,\"offset\":0,\"block\":4,\"registerTypeId\":2}"
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/createModbusRegister
+{
+  "data": {
+    "payload": "{\"name\":\"S7 MDC\",\"registerTypeId\":2,\"dataTypeId\":1,\"startAddress\":0,\"registerQuantity\":2}"
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/createIOLinkEndpoint
+{
+  "data": {
+    "payload": "{\"name\":\"S7 MDC\",\"portId\":7,\"targetId\":1,\"accessTypeId\":1,\"offset\":0,\"block\":4,\"refreshDuration\":1000,\"linkedModbusRegisterId\":1}"
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/reloadApps
+{
+  "data": {}
+}</code></pre>
+
+        <h3>Use Case 5 - Change Modbus TCP Server Settings</h3>
+        <p>
+          This example enables the Modbus server on Ethernet interface P1. The
+          API validation accepts port values from 500 to 600, max connections
+          from 1 to 100, and transmit timeout from 0 to 3600000 ms.
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/updateModbusServerInfo
+{
+  "data": {
+    "payload": "{\"port\":502,\"ethInterfaceId\":1,\"maxConnection\":10,\"transmitTimeout\":3000,\"enabled\":true}"
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/reloadApps
+{
+  "data": {}
+}</code></pre>
+
+        <h3>Use Case 6 - Read And Write Runtime Values</h3>
+        <p>
+          Reading values is useful for commissioning checks. Writing values is
+          only supported for Coil or Holding Register definitions, or through a
+          configured Device to Sensor IO-Link endpoint.
+        </p>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/readModbusRegisters
+{
+  "data": {
+    "payload": "[{\"id\":1}]",
+    "decodeHexValue": true
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/writeModbusRegisters
+{
+  "data": {
+    "payload": "[{\"id\":1,\"value\":1234}]"
+  }
+}</code></pre>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/writeIOLinkEndpoint
+{
+  "data": {
+    "id": 1,
+    "payload": "{\"value\":1234,\"dataTypeId\":1}"
+  }
+}</code></pre>
+      </section>
+
+      <section id="reload" class="manual-section">
+        <h2>Part 8 - Reload Apps After Changes</h2>
+        <p>
+          Saved configuration is not always active immediately in the running
+          Modbus server and IO-Link polling processes. After using any API that
+          changes configuration, reload apps when the change sequence is
+          complete.
+        </p>
+        <table class="manual-table">
+          <thead>
+            <tr><th>Change Type</th><th>Reload Apps?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Update app settings</td><td>Yes</td></tr>
+            <tr><td>Enable or disable an IO-Link port</td><td>Yes</td></tr>
+            <tr><td>Update Modbus server settings</td><td>Yes</td></tr>
+            <tr><td>Create, update, delete, or reset Modbus registers</td><td>Yes</td></tr>
+            <tr><td>Create, update, delete, enable, disable, or reset IO-Link endpoints</td><td>Yes</td></tr>
+            <tr><td>Read device health, read configuration, or read current values</td><td>No</td></tr>
+            <tr><td>Write a runtime value through an existing register or endpoint</td><td>Normally no. Reload only if configuration was also changed.</td></tr>
+          </tbody>
+        </table>
+        <pre><code>POST http://&lt;device-ip&gt;:8080/api/crown/App/reloadApps
+{
+  "data": {}
+}</code></pre>
+      </section>
+
+      <section id="troubleshooting" class="manual-section">
+        <h2>Part 9 - Troubleshooting</h2>
+        <table class="manual-table">
+          <thead>
+            <tr><th>Symptom</th><th>Likely Cause</th><th>Recommended Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>HTTP 401 or login page returned</td><td>Missing, expired, or wrong token cookie.</td><td>Sign in again and send <code>Cookie: access_token=&lt;token&gt;</code> with the request.</td></tr>
+            <tr><td><code>header.status</code> is not <code>0</code></td><td>The platform rejected the CROWN call.</td><td>Check the URL, API name, cookie, request method, and JSON body.</td></tr>
+            <tr><td><code>success</code> is <code>false</code></td><td>The application rejected the request.</td><td>Read <code>message</code>. Common messages include <code>invalid_params</code>, <code>invalid_port_id</code>, <code>not_found_endpoint</code>, and <code>invalid_linked_modbus_register_quantity</code>.</td></tr>
+            <tr><td>Request takes a long time</td><td>Device is busy, the app is reloading, or IO-Link/Modbus work is heavy.</td><td>Use at least a 60-second timeout and check <code>/api/v1/system/monitor/stats</code>.</td></tr>
+            <tr><td>IO-Link polling or Modbus values update slowly during API usage</td><td>API requests are being sent too frequently for the available device hardware resources.</td><td>Use APIs for remote configuration and service actions, not high-frequency data collection. Reduce request frequency and use Modbus TCP for regular process-data exchange.</td></tr>
+            <tr><td>Changed settings are saved but behavior did not change</td><td>Runtime processes are still using old configuration.</td><td>Call <code>reloadApps</code>, wait for apps to restart, then read the configuration again.</td></tr>
+            <tr><td>Cannot link endpoint to register</td><td>Register quantity is not exactly the required quantity, or the register is already linked.</td><td>Call <code>getModbusQuantityForEndpointSource</code>, create a matching register, and confirm it is not linked to another endpoint.</td></tr>
+            <tr><td>Modbus value appears swapped in another system</td><td>The client interprets bytes or words differently.</td><td>Use big-endian bytes inside each register and high-word-first order for multi-register values.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+
+    </main>
+
+    <footer class="site-footer">
+      <span>&copy; <span data-current-year></span> SICK Engineering Hub APAC</span>
+    </footer>
+    <script src="../../../assets/site/site.js"></script>
+  </body>
+</html>

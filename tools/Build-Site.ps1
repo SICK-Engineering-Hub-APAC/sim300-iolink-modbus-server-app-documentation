@@ -184,6 +184,7 @@ function Update-AliasHtmlPaths {
         $content = Get-Content -Raw -LiteralPath $_.FullName
         $content = $content.Replace("../../../assets/", "../assets/")
         $content = $content.Replace("../../../index.html", "../index.html")
+        $content = $content.Replace("../../../usage-manual/", "../usage-manual/")
         $content = $content.Replace("../versions.html", "../manuals/$Slug/versions.html")
         Set-Content -LiteralPath $_.FullName -Value $content -Encoding UTF8
     }
@@ -330,9 +331,26 @@ $cards = $manualEntries | ForEach-Object {
 "@
 }
 
-$apiPlaceholderPath = Join-Path $resolvedOutput "api-manual"
-New-Item -ItemType Directory -Path $apiPlaceholderPath -Force | Out-Null
-Set-Content -LiteralPath (Join-Path $apiPlaceholderPath "index.html") -Value (New-ComingSoonHtml -Title "SIM300 IO-Link Modbus TCP Server API Manual" -Description "Future reference for backend APIs, Modbus register behavior, and technical integration details.") -Encoding UTF8
+$hasApiManual = @($manualEntries | Where-Object {
+    -not [string]::IsNullOrWhiteSpace([string]$_.PublicPath) -and ([string]$_.PublicPath).Trim("/") -eq "api-manual"
+}).Count -gt 0
+
+$apiPlaceholderCard = ""
+if (-not $hasApiManual) {
+    $apiPlaceholderPath = Join-Path $resolvedOutput "api-manual"
+    New-Item -ItemType Directory -Path $apiPlaceholderPath -Force | Out-Null
+    Set-Content -LiteralPath (Join-Path $apiPlaceholderPath "index.html") -Value (New-ComingSoonHtml -Title "SIM300 IO-Link Modbus TCP Server API Manual" -Description "Future reference for backend APIs, Modbus register behavior, and technical integration details.") -Encoding UTF8
+
+    $apiPlaceholderCard = @"
+        <a class="manual-card" href="api-manual/index.html">
+          <h2>API Manual</h2>
+          <p>Reserved for future API, register behavior, and integration reference documentation.</p>
+          <div class="manual-card__meta">
+            <span class="badge">Planned</span>
+          </div>
+        </a>
+"@
+}
 
 $main = @"
       <section class="hero">
@@ -347,13 +365,7 @@ $main = @"
       </section>
       <section class="manual-grid" aria-label="Documentation list">
 $($cards -join "")
-        <a class="manual-card" href="api-manual/index.html">
-          <h2>API Manual</h2>
-          <p>Reserved for future API, register behavior, and integration reference documentation.</p>
-          <div class="manual-card__meta">
-            <span class="badge">Planned</span>
-          </div>
-        </a>
+$apiPlaceholderCard
       </section>
 "@
 

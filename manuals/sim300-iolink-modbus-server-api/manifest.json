@@ -1,0 +1,22 @@
+{
+  "slug": "sim300-iolink-modbus-server-api",
+  "title": "SIM300 IO-Link Modbus TCP Server API Manual",
+  "description": "REST API and CROWN API reference for checking device health, reading configuration, changing Modbus registers, and managing IO-Link endpoint mappings.",
+  "publicPath": "api-manual",
+  "manualType": "api",
+  "latest": "v1.0.0",
+  "versions": [
+    {
+      "version": "v1.0.0",
+      "status": "current",
+      "date": "2026-08-02",
+      "summary": "API manual aligned with application version 1.1.0.",
+      "compatibleAppVersions": [
+        "1.1.0"
+      ],
+      "compatibleFirmwareVersions": [
+        "SIM300 firmware 1.2.0"
+      ]
+    }
+  ]
+}

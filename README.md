@@ -11,7 +11,7 @@ Public entry points:
 ```text
 /                         Documentation landing page
 /usage-manual/            Latest usage manual
-/api-manual/              Planned API manual page
+/api-manual/              Latest API manual
 /manuals/<slug>/versions.html  Version selector for a manual
 ```
 
@@ -22,12 +22,17 @@ Public entry points:
 |-- .github/workflows/deploy-pages.yml  GitHub Pages CI/CD workflow
 |-- assets/site/                        Shared CSS and JavaScript for the index pages
 |-- manuals/                            Manual source files
-|   `-- sim300-iolink-modbus-server/
-|       |-- manifest.json               Manual metadata and published versions
+|   |-- sim300-iolink-modbus-server/
+|   |   |-- manifest.json               Usage manual metadata and published versions
+|   |   `-- versions/
+|   |       `-- v1.0.0/
+|   |           |-- index.html          Versioned usage manual entry page
+|   |           `-- assets/             Images, downloads, static files for this version
+|   `-- sim300-iolink-modbus-server-api/
+|       |-- manifest.json               API manual metadata and published versions
 |       `-- versions/
 |           `-- v1.0.0/
-|               |-- index.html          Versioned manual entry page
-|               `-- assets/             Images, downloads, static files for this version
+|               `-- index.html          Versioned API manual entry page
 |-- tools/Build-Site.ps1                Builds the publishable static site into _site/
 `-- _site/                              Generated site output, ignored by Git
 ```
