@@ -1,0 +1,16 @@
+{
+  "slug": "sim300-fleet-manager-nodered",
+  "title": "SIM300 Fleet Manager for Node-RED Usage Manual",
+  "description": "Installation and operating guide for the Node-RED Fleet Manager used to monitor, configure, back up, restore, and clone SIM300 devices.",
+  "publicPath": "fleet-manager-usage-manual",
+  "manualType": "usage",
+  "latest": "v1.0.0",
+  "versions": [{
+    "version": "v1.0.0",
+    "status": "current",
+    "date": "2026-08-23",
+    "summary": "Initial manual for the Node-RED Fleet Manager release.",
+    "compatibleAppVersions": ["SIM300 IO-Link Modbus TCP Server 1.1.0"],
+    "compatibleFirmwareVersions": ["SIM300 firmware 1.2.0"]
+  }]
+}

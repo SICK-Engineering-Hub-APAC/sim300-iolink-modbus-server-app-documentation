@@ -1,0 +1,16 @@
+{
+  "slug": "sim300-fleet-manager-nodered-api",
+  "title": "SIM300 Fleet Manager for Node-RED API Manual",
+  "description": "API coverage and integration reference for the Node-RED Fleet Manager and SIM300 device APIs.",
+  "publicPath": "fleet-manager-api-manual",
+  "manualType": "api",
+  "latest": "v1.0.0",
+  "versions": [{
+    "version": "v1.0.0",
+    "status": "current",
+    "date": "2026-08-23",
+    "summary": "API reference for Fleet Manager control-plane workflows.",
+    "compatibleAppVersions": ["SIM300 IO-Link Modbus TCP Server 1.1.0"],
+    "compatibleFirmwareVersions": ["SIM300 firmware 1.2.0"]
+  }]
+}

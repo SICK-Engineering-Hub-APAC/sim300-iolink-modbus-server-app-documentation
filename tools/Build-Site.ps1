@@ -185,6 +185,8 @@ function Update-AliasHtmlPaths {
         $content = $content.Replace("../../../assets/", "../assets/")
         $content = $content.Replace("../../../index.html", "../index.html")
         $content = $content.Replace("../../../usage-manual/", "../usage-manual/")
+        $content = $content.Replace("../../../fleet-manager-usage-manual/", "../fleet-manager-usage-manual/")
+        $content = $content.Replace("../../../fleet-manager-api-manual/", "../fleet-manager-api-manual/")
         $content = $content.Replace("../versions.html", "../manuals/$Slug/versions.html")
         Set-Content -LiteralPath $_.FullName -Value $content -Encoding UTF8
     }
