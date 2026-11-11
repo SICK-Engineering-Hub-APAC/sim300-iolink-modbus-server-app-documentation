@@ -10,7 +10,7 @@
     "status": "current",
     "date": "2026-08-23",
     "summary": "Initial manual for the Node-RED Fleet Manager release.",
-    "compatibleAppVersions": ["SIM300 IO-Link Modbus TCP Server 1.1.0"],
+    "compatibleAppVersions": ["SIM300 IO-Link Modbus TCP Server 1.1.0", "SIM300 IO-Link Modbus TCP Server 1.2.2"],
     "compatibleFirmwareVersions": ["SIM300 firmware 1.2.0"]
   }]
 }

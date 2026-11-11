@@ -4,11 +4,23 @@
   "description": "Installation, operation, configuration, backup, and troubleshooting guide for the SIM300 IO-Link Modbus TCP Server AppSpace application.",
   "publicPath": "usage-manual",
   "manualType": "usage",
-  "latest": "v1.2.2",
+  "latest": "v1.2.3",
   "versions": [
     {
-      "version": "v1.2.2",
+      "version": "v1.2.3",
       "status": "current",
+      "date": "2026-11-11",
+      "summary": "Documentation update for application version 1.2.2, with the training-video section removed.",
+      "compatibleAppVersions": [
+        "1.2.2"
+      ],
+      "compatibleFirmwareVersions": [
+        "SIM300 firmware 1.2.0"
+      ]
+    },
+    {
+      "version": "v1.2.2",
+      "status": "archived",
       "date": "2026-11-11",
       "summary": "Usage manual aligned with application version 1.2.2, including IO-Link diagnostics and FC04 system registers.",
       "compatibleAppVersions": [

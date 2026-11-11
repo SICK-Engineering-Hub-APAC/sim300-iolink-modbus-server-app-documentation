@@ -62,9 +62,9 @@
       <section id="how-to-use" class="manual-section">
         <h2>Start Here</h2>
         <p>
-          Use this page as a step-by-step guide. Start with the videos for a
-          quick visual overview, then follow the written sections when you need
-          exact settings, field meanings, checks, or troubleshooting steps.
+          Use this page as a step-by-step guide. Follow the written sections
+          when you need exact settings, field meanings, checks, or
+          troubleshooting steps.
         </p>
         <table class="manual-table">
           <thead>
@@ -77,8 +77,8 @@
             <tr>
               <td>First-time setup</td>
               <td>
-                Training Videos, Before You Start, Commissioning Workflow,
-                Download And Install, Open The Web UI.
+                Before You Start, Commissioning Workflow, Download And Install,
+                Open The Web UI.
               </td>
             </tr>
             <tr>
@@ -103,146 +103,35 @@
 
       <h2>Contents</h2>
       <ul class="manual-toc">
-        <li><a href="#instruction-videos">Part 1 - Training Videos</a></li>
-        <li><a href="#overview">Part 2 - Understand The Application</a></li>
+        <li><a href="#overview">Part 1 - Understand The Application</a></li>
         <li>
-          <a href="#version-selection">Part 3 - Choose The Correct Manual</a>
+          <a href="#version-selection">Part 2 - Choose The Correct Manual</a>
         </li>
-        <li><a href="#before-you-start">Part 4 - Prepare The Work</a></li>
-        <li><a href="#commissioning">Part 5 - Commission The System</a></li>
-        <li><a href="#installation">Part 6 - Download And Install</a></li>
-        <li><a href="#access">Part 7 - Open The Web UI</a></li>
-        <li><a href="#layout">Part 8 - Understand The Screen</a></li>
-        <li><a href="#main-page">Part 9 - Check Runtime Status</a></li>
+        <li><a href="#before-you-start">Part 3 - Prepare The Work</a></li>
+        <li><a href="#commissioning">Part 4 - Commission The System</a></li>
+        <li><a href="#installation">Part 5 - Download And Install</a></li>
+        <li><a href="#access">Part 6 - Open The Web UI</a></li>
+        <li><a href="#layout">Part 7 - Understand The Screen</a></li>
+        <li><a href="#main-page">Part 8 - Check Runtime Status</a></li>
         <li>
-          <a href="#iolink-endpoints">Part 10 - Configure IO-Link Mappings</a>
+          <a href="#iolink-endpoints">Part 9 - Configure IO-Link Mappings</a>
         </li>
-        <li><a href="#modbus-configuration">Part 11 - Configure Modbus</a></li>
+        <li><a href="#modbus-configuration">Part 10 - Configure Modbus</a></li>
         <li><a href="#system-registers">Reference - System Monitoring Registers</a></li>
-        <li><a href="#normal-operation">Part 12 - Operate The System</a></li>
-        <li><a href="#data-order">Part 13 - Check Data Order</a></li>
-        <li><a href="#application-settings">Part 14 - Adjust Settings</a></li>
-        <li><a href="#logs">Part 15 - Review Logs</a></li>
-        <li><a href="#help">Part 16 - Open Help Links</a></li>
-        <li><a href="#backup">Part 17 - Back Up And Clone</a></li>
-        <li><a href="#system-checks">Part 18 - Final System Checks</a></li>
-        <li><a href="#troubleshooting">Part 19 - Troubleshooting</a></li>
+        <li><a href="#normal-operation">Part 11 - Operate The System</a></li>
+        <li><a href="#data-order">Part 12 - Check Data Order</a></li>
+        <li><a href="#application-settings">Part 13 - Adjust Settings</a></li>
+        <li><a href="#logs">Part 14 - Review Logs</a></li>
+        <li><a href="#help">Part 15 - Open Help Links</a></li>
+        <li><a href="#backup">Part 16 - Back Up And Clone</a></li>
+        <li><a href="#system-checks">Part 17 - Final System Checks</a></li>
+        <li><a href="#troubleshooting">Part 18 - Troubleshooting</a></li>
         <li><a href="#glossary">Reference - Glossary</a></li>
         <li><a href="#release-notes">Reference - Release Notes</a></li>
       </ul>
 
-      <section id="instruction-videos" class="manual-section">
-        <h2>Part 1 - Training Videos</h2>
-        <p>
-          These videos demonstrate the main operating procedures for the
-          application. Use them together with the written procedures in this
-          manual.
-        </p>
-        <table class="manual-table manual-table--videos">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Video</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Part 01 - Access and Sensor Setup</td>
-              <td>
-                Open the Web UI, connect the sensor, verify port status, and
-                upload the IODD file.
-              </td>
-              <td>
-                <video class="manual-video" controls preload="metadata">
-                  <source
-                    src="../../../assets/videos/usage-manual/Part_01_Access_and_Sensor_Setup.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              </td>
-            </tr>
-            <tr>
-              <td>Part 02 - IO-Link Data Mapping</td>
-              <td>
-                Create process-data and ISDU endpoints, then verify their Modbus
-                register values.
-              </td>
-              <td>
-                <video class="manual-video" controls preload="metadata">
-                  <source
-                    src="../../../assets/videos/usage-manual/Part_02_IO-Link_Data_Mapping.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              </td>
-            </tr>
-            <tr>
-              <td>Part 03 - Endpoint Management</td>
-              <td>
-                Search, filter, update, disable, enable, and delete IO-Link
-                endpoints; observe write logs and port controls.
-              </td>
-              <td>
-                <video class="manual-video" controls preload="metadata">
-                  <source
-                    src="../../../assets/videos/usage-manual/Part_03_Endpoint_Management.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              </td>
-            </tr>
-            <tr>
-              <td>Part 04 - Modbus Configuration</td>
-              <td>
-                Create and manage registers, reset configurations, update the
-                Modbus server, and write ISDU values from a Modbus client.
-              </td>
-              <td>
-                <video class="manual-video" controls preload="metadata">
-                  <source
-                    src="../../../assets/videos/usage-manual/Part_04_Modbus_Configuration.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              </td>
-            </tr>
-            <tr>
-              <td>Part 05 - Settings and Monitoring</td>
-              <td>
-                Update general and network settings, review logs, and open the
-                Help page.
-              </td>
-              <td>
-                <video class="manual-video" controls preload="metadata">
-                  <source
-                    src="../../../assets/videos/usage-manual/Part_05_Settings_and_Monitoring.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              </td>
-            </tr>
-            <tr>
-              <td>Part 06 - Backup and Device Cloning</td>
-              <td>
-                Download and upload PersistentData.bin to back up settings or
-                clone a configured device.
-              </td>
-              <td>
-                <video class="manual-video" controls preload="metadata">
-                  <source
-                    src="../../../assets/videos/usage-manual/Part_06_Backup_and_Device_Cloning.mp4"
-                    type="video/mp4"
-                  />
-                </video>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
       <section id="overview" class="manual-section">
-        <h2>Part 2 - Understand The Application</h2>
+        <h2>Part 1 - Understand The Application</h2>
         <p>
           The application runs on a SICK SIM300 device. It connects IO-Link data
           with a Modbus TCP server so that a PLC, SCADA system, or other Modbus
@@ -324,7 +213,7 @@
       </section>
 
       <section id="version-selection" class="manual-section">
-        <h2>Part 3 - Choose The Correct Manual</h2>
+        <h2>Part 2 - Choose The Correct Manual</h2>
         <p>
           Use the manual version that matches the application installed on the
           SIM300. This matters because page names, fields, limits, and
@@ -372,7 +261,7 @@
       </section>
 
       <section id="before-you-start" class="manual-section">
-        <h2>Part 4 - Prepare The Work</h2>
+        <h2>Part 3 - Prepare The Work</h2>
         <p>
           Confirm these items before commissioning or changing a configuration.
         </p>
@@ -404,7 +293,7 @@
       </section>
 
       <section id="commissioning" class="manual-section">
-        <h2>Part 5 - Commission The System</h2>
+        <h2>Part 4 - Commission The System</h2>
         <p>
           Follow this sequence for a new installation or when rebuilding a
           configuration from zero. It keeps the work in an order that avoids
@@ -460,7 +349,7 @@
       </section>
 
       <section id="installation" class="manual-section">
-        <h2>Part 6 - Download And Install</h2>
+        <h2>Part 5 - Download And Install</h2>
         <p>
           Install the AppSpace application package on the SIM300 before opening
           the web UI.
@@ -518,7 +407,7 @@
       </section>
 
       <section id="access" class="manual-section">
-        <h2>Part 7 - Open The Web UI</h2>
+        <h2>Part 6 - Open The Web UI</h2>
         <p>Open a browser such as Google Chrome or Microsoft Edge and enter:</p>
         <pre><code>http://&lt;device-ip-address&gt;:8080/#/home?msdd=App.msdd</code></pre>
         <p>Example used while preparing this manual:</p>
@@ -530,7 +419,7 @@
       </section>
 
       <section id="layout" class="manual-section">
-        <h2>Part 8 - Understand The Screen</h2>
+        <h2>Part 7 - Understand The Screen</h2>
         <p>
           The web UI uses a fixed header and page area. The menu icon opens the
           side navigation. The status chips in the header give a quick runtime
@@ -572,7 +461,7 @@
       </section>
 
       <section id="main-page" class="manual-section">
-        <h2>Part 9 - Check Runtime Status</h2>
+        <h2>Part 8 - Check Runtime Status</h2>
         <figure class="manual-figure">
           <img
             src="assets/screenshots/home.png"
@@ -685,7 +574,7 @@
       </section>
 
       <section id="iolink-endpoints" class="manual-section">
-        <h2>Part 10 - Configure IO-Link Mappings</h2>
+        <h2>Part 9 - Configure IO-Link Mappings</h2>
         <figure class="manual-figure">
           <img
             src="assets/screenshots/iolink-endpoint-configuration.png"
@@ -916,7 +805,7 @@
       </section>
 
       <section id="modbus-configuration" class="manual-section">
-        <h2>Part 11 - Configure Modbus</h2>
+        <h2>Part 10 - Configure Modbus</h2>
         <figure class="manual-figure">
           <img
             src="assets/screenshots/modbus-configuration.png"
@@ -1277,7 +1166,7 @@
       </section>
 
       <section id="normal-operation" class="manual-section">
-        <h2>Part 12 - Operate The System</h2>
+        <h2>Part 11 - Operate The System</h2>
         <p>
           During normal production use, operators usually do not need to change
           register or endpoint definitions. The most common tasks are checking
@@ -1357,7 +1246,7 @@
       </section>
 
       <section id="data-order" class="manual-section">
-        <h2>Part 13 - Check Data Order</h2>
+        <h2>Part 12 - Check Data Order</h2>
         <p>
           Use this section when configuring a PLC, SCADA system, or test client
           to read and write multi-byte values correctly.
@@ -1415,7 +1304,7 @@
       </section>
 
       <section id="application-settings" class="manual-section">
-        <h2>Part 14 - Adjust Settings</h2>
+        <h2>Part 13 - Adjust Settings</h2>
         <div class="figure-grid">
           <figure class="manual-figure">
             <img
@@ -1475,7 +1364,7 @@
       </section>
 
       <section id="logs" class="manual-section">
-        <h2>Part 15 - Review Logs</h2>
+        <h2>Part 14 - Review Logs</h2>
         <figure class="manual-figure">
           <img
             src="assets/screenshots/log-monitoring.png"
@@ -1493,7 +1382,7 @@
       </section>
 
       <section id="help" class="manual-section">
-        <h2>Part 16 - Open Help Links</h2>
+        <h2>Part 15 - Open Help Links</h2>
         <figure class="manual-figure">
           <img
             src="assets/screenshots/help.png"
@@ -1509,7 +1398,7 @@
       </section>
 
       <section id="backup" class="manual-section">
-        <h2>Part 17 - Back Up And Clone</h2>
+        <h2>Part 16 - Back Up And Clone</h2>
         <p>
           Use the SIM300 File Manager when you need to back up the current
           configuration or copy the same settings to another SIM300 device.
@@ -1546,7 +1435,7 @@
       </section>
 
       <section id="system-checks" class="manual-section">
-        <h2>Part 18 - Final System Checks</h2>
+        <h2>Part 17 - Final System Checks</h2>
         <table class="manual-table">
           <thead>
             <tr>
@@ -1589,7 +1478,7 @@
       </section>
 
       <section id="troubleshooting" class="manual-section">
-        <h2>Part 19 - Troubleshooting</h2>
+        <h2>Part 18 - Troubleshooting</h2>
         <p>
           Start troubleshooting from the Main Page. It shows the fastest status
           indicators for the app, Modbus server, SIM300 device connection, and
