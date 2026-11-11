@@ -747,6 +747,53 @@
           <li>Reload apps if the success notification asks for it.</li>
         </ol>
 
+        <h3>What Happens When You Save An Endpoint</h3>
+        <table class="manual-table">
+          <thead>
+            <tr>
+              <th>Endpoint Configuration</th>
+              <th>Runtime Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sensor to Device (source), enabled and linked</td>
+              <td>
+                The application reads the selected IO-Link value using the
+                endpoint refresh duration and updates the linked Modbus
+                register. A Modbus client reads that register using the
+                function code for its register type.
+              </td>
+            </tr>
+            <tr>
+              <td>Device to Sensor (destination), enabled and linked</td>
+              <td>
+                A Modbus client write to the linked coil or holding register is
+                converted and sent to the selected IO-Link Process Data OUT or
+                ISDU target. Use the register address and write function code
+                shown for that register type.
+              </td>
+            </tr>
+            <tr>
+              <td>Endpoint saved without a linked register</td>
+              <td>
+                The endpoint definition remains in the list, but it does not
+                provide a Modbus register path for that value. Link a register
+                before relying on Modbus data exchange.
+              </td>
+            </tr>
+            <tr>
+              <td>Generate selected for a linked register</td>
+              <td>
+                The application saves the endpoint first, then creates the
+                planned register. If register creation reports an error, the
+                endpoint may already be saved; refresh both lists and complete
+                the missing register link before testing runtime data.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
         <h3>View, Edit, Delete, Reset, Or Enable Endpoints</h3>
         <table class="manual-table">
           <thead>
@@ -767,8 +814,12 @@
             <tr>
               <td>Edit endpoint</td>
               <td>
-                Select Edit, update the required fields, confirm linked register
-                validation, select Save, and reload apps if requested.
+                Select Edit and change the name or mapping. If you change port,
+                target, access type, or the selected Process Data/ISDU
+                definition, wait for the linked-register quantity check to
+                finish. Keep an existing register only when its displayed
+                validation is valid; otherwise select a compatible register or
+                use Generate. Select Save and follow any reload prompt.
               </td>
             </tr>
             <tr>
@@ -781,8 +832,13 @@
             <tr>
               <td>Delete endpoint</td>
               <td>
-                Select Delete, review the confirmation prompt, and select Send
-                to confirm.
+                Select Delete and review the confirmation. When a user-created
+                register is linked, the dialog offers an optional checkbox to
+                delete that register too. Leave it unchecked to remove the
+                endpoint and retain the now-unlinked register; select it to
+                remove both. The endpoint is deleted first. If the optional
+                register deletion then fails, refresh the Register List and
+                remove or reuse the remaining unlinked register separately.
               </td>
             </tr>
             <tr>
@@ -804,9 +860,13 @@
 
         <div class="manual-warning">
           <strong>Mapping rule</strong>
-          One linked Modbus register can only be assigned to one IO-Link
-          endpoint. The linked register quantity must exactly match the quantity
-          required by the selected endpoint definition.
+          A Modbus register can be linked to only one IO-Link endpoint. The
+          selected register quantity must exactly match the quantity required
+          for the chosen port, direction, access type, and endpoint definition.
+          Do not continue while validation is checking, invalid, or in error.
+          For an existing mapping, changing the endpoint definition without
+          selecting a quantity-compatible register can make the mapping save
+          fail.
         </div>
       </section>
 
@@ -880,6 +940,13 @@
         <p>
           A Modbus register entry defines a visible Modbus memory area. Register
           ranges must not overlap within the same register type.
+        </p>
+        <p>
+          Create Register makes a standalone register; it does not select an
+          IO-Link endpoint. To connect a register to an endpoint, select it in
+          the endpoint form or use Generate there. The table shows any linked
+          endpoint and its port, sensor, direction, and endpoint definition so
+          you can check what an edit or delete will affect.
         </p>
         <section id="system-registers">
           <h3>Default System Registers For Port And Sensor Monitoring</h3>
@@ -1071,14 +1138,28 @@
           <li>Open Modbus Configuration.</li>
           <li>Select Create Register.</li>
           <li>Enter a clear register name.</li>
-          <li>Select the register type and data type.</li>
-          <li>Enter the starting address and quantity.</li>
           <li>
-            Confirm that the range does not overlap an existing register of the
-            same type.
+            Select the register type that matches the required Modbus access:
+            Coil or Holding Register for client writes; Discrete Input or Input
+            Register for read-only values. Check the function-code hint beside
+            the selected type.
+          </li>
+          <li>
+            Select the data type, starting address, and quantity. For an
+            endpoint mapping, use the quantity shown by endpoint validation;
+            it must match exactly.
+          </li>
+          <li>
+            Confirm that the full address range (start address through start
+            address plus quantity minus one) is valid and does not overlap a
+            register of the same type.
           </li>
           <li>Select Create.</li>
-          <li>Reload apps if the success notification asks for it.</li>
+          <li>
+            If this register will serve an endpoint, return to IO-Link Endpoints
+            and select it there. Refresh the register choices if it is not
+            listed. Reload apps if the success notification asks for it.
+          </li>
         </ol>
 
         <h3>View Or Read A Register</h3>
@@ -1109,29 +1190,41 @@
             <tr>
               <td>Edit one register</td>
               <td>
-                Find the register, select Edit, change the required fields,
-                select Save, and reload apps if requested.
+                Find the register and review its linked endpoint before editing.
+                Select Edit, change the required fields, and keep the range
+                non-overlapping. If the register is linked, do not change its
+                type or quantity unless you have checked that the endpoint
+                mapping still requires that quantity and uses the matching
+                function code. The register edit does not change the endpoint's
+                IO-Link definition. Select Save and follow any reload prompt.
               </td>
             </tr>
             <tr>
               <td>Delete one register</td>
               <td>
-                Find the register, select Delete, review the confirmation
-                prompt, and select Send to confirm.
+                Find the register and check whether it is linked. Select
+                Delete, review the confirmation, and confirm. The register is
+                removed and the endpoint remains configured but is unlinked, so
+                it no longer exchanges that value with Modbus. To restore the
+                mapping, create or select another compatible register from the
+                endpoint form. SYSTEM registers cannot be deleted.
               </td>
             </tr>
             <tr>
               <td>Reset registers by type</td>
               <td>
                 Select Reset Registers, choose a register type, select Submit,
-                and reload apps if requested.
+                and reload apps if requested. Any removed linked registers are
+                unlinked from their endpoints; the endpoint definitions remain.
               </td>
             </tr>
             <tr>
               <td>Reset all registers</td>
               <td>
                 Select Reset Registers, keep All selected, select Submit, and
-                reload apps if requested.
+                reload apps if requested. User registers are removed and their
+                endpoint links are cleared; automatically managed SYSTEM
+                registers are preserved.
               </td>
             </tr>
           </tbody>
